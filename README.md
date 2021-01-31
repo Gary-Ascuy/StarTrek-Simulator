@@ -1,12 +1,16 @@
-# Star Trek - Simulator
+## Star Trek - Simulator
 
 Multiplayer Online Simulator to train Klingon Army
 
-## Architecture 
+### Architecture 
 
 ![Simulator Architecture](./architecture.png)
 
-## Tools
+### Requirements
+
+[PDF:File, Star Trek - Simulator](./StarTrek-Simulator.pdf)
+
+### Tools
 
 - VS Code Latest with Live Server ( > 5.6.1 )
 - JavaScript, HTTML, CSS
@@ -21,12 +25,12 @@ $ cd tools
 $ docker-compose up
 ```
 
-## Admin RabbitMQ
+### Admin RabbitMQ
 
 - http://frontend.ascuy.me:15672/
 - http://localhost:15672/
 
-## Refs
+### Refs
 
 - https://www.rabbitmq.com/web-mqtt.html
 - https://www.npmjs.com/package/rsup-mqtt
