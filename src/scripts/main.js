@@ -76,6 +76,30 @@ class StarShip {
   }
 }
 
+function addKeyEvent(batship) {
+  const up = ['w', 'ArrowUp']
+  const down = ['s', 'ArrowDown']
+  const left = ['a', 'ArrowLeft']
+  const right = ['d', 'ArrowRight']
+  const go = [...up, ...down]
+  const direction = [...left, ...right]
+  const stop = [' ', 'c', 'x']
+
+  document.body.addEventListener('keydown', (e) => {
+    if (up.indexOf(e.key) >= 0) batship.setState(1, batship.state.direction)
+    if (down.indexOf(e.key) >= 0) batship.setState(-1, batship.state.direction)
+    if (left.indexOf(e.key) >= 0) batship.setState(batship.state.go, -1)
+    if (right.indexOf(e.key) >= 0) batship.setState(batship.state.go, 1)
+
+    if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
+  })
+
+  document.body.addEventListener('keyup', (e) => {
+    if (go.indexOf(e.key) >= 0) batship.setState(0, batship.state.direction)
+    if (direction.indexOf(e.key) >= 0) batship.setState(batship.state.go, 0)
+  })
+}
+
 async function main() {
   console.log('Starting Star Trek Simulator')
   const galaxy = document.getElementById('galaxy')
@@ -87,21 +111,7 @@ async function main() {
 
   const batship = StarShip.create(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45)
   batship.play()
-
-  // key events
-  document.body.addEventListener('keydown', (e) => {
-    if (e.key === 'w') batship.setState(1, batship.state.direction)
-    if (e.key === 's') batship.setState(-1, batship.state.direction)
-    if (e.key === 'a') batship.setState(batship.state.go, -1)
-    if (e.key === 'd') batship.setState(batship.state.go, 1)
-
-    if (e.key === ' ') batship.setState(0, 0)
-  })
-
-  document.body.addEventListener('keyup', (e) => {
-    if (e.key === 'w' || e.key === 's') batship.setState(0, batship.state.direction)
-    if (e.key === 'a' || e.key === 'd') batship.setState(batship.state.go, 0)
-  })
+  addKeyEvent(batship)
 
   console.log('Connecting to RabbitMQ/MQTT over WebSocket')
   await connect(rabbitmqSettings)
