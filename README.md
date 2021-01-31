@@ -1,13 +1,13 @@
-# Star Trek - Simulator 
+# Star Trek - Simulator
 
 Multiplayer Online Simulator to train Klingon Army
 
-## Tools 
+## Tools
 
 - VS Code Latest with Live Server ( > 5.6.1 )
 - JavaScript, HTTML, CSS
 
-#### Optional Tools 
+#### Optional Tools
 
 - Docker
 - Docker Compose
@@ -22,7 +22,7 @@ $ docker-compose up
 - http://frontend.ascuy.me:15672/
 - http://localhost:15672/
 
-## Refs 
+## Refs
 
 - https://www.rabbitmq.com/web-mqtt.html
 - https://www.npmjs.com/package/rsup-mqtt
