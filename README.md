@@ -8,7 +8,7 @@ Multiplayer Online Simulator to train Klingon Army
 
 ### Requirements
 
-[PDF:File, Star Trek - Simulator](./StarTrek-Simulator.pdf)
+- [PDF:File - Star Trek Simulator](./StarTrek-Simulator.pdf)
 
 ### Tools
 
