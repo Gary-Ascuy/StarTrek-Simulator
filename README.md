@@ -2,12 +2,16 @@
 
 Multiplayer Online Simulator to train Klingon Army
 
+## Architecture 
+
+![Simulator Architecture](./architecture.png)
+
 ## Tools
 
 - VS Code Latest with Live Server ( > 5.6.1 )
 - JavaScript, HTTML, CSS
 
-#### Optional Tools
+### Optional Tools
 
 - Docker
 - Docker Compose
