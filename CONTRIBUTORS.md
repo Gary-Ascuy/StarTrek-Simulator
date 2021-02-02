@@ -6,7 +6,7 @@
 ## Contributors (sorted alphabetically)
 ============================================
 
-* **[A...]()**
+* **[Amir Sadour Gutiérrez](https://github.com/amir1226)**
 
   * Developer
 
