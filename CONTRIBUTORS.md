@@ -9,12 +9,12 @@
 * **[Amir Sadour Gutiérrez](https://github.com/amir1226)**
 
   * Developer
-  
-* **[Laura Arango Mayor](https://github.com/lauarangomayor)**
-
-  * Developer
 
 * **[Jem Pool Suarez](https://github.com/jempool)**
+
+  * Developer
+ 
+* **[Laura Arango Mayor](https://github.com/lauarangomayor)**
 
   * Developer
   
