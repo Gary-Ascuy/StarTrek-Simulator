@@ -13,3 +13,7 @@
 * **[Jem Pool Suarez](https://github.com/jempool)**
 
   * Developer
+  
+* **[Santiago Hernández Arias](https://github.com/SH-Arias)**
+
+  * Developer
