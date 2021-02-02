@@ -19,9 +19,104 @@
 </head>
 
 <body onload="main()">
-  <h1 class="title">Hello World</h1>
+  <h1 class="title">StarTrek-Simulator</h1>
   <noscript>Your browser does not support JavaScript!</noscript>
+  <!-- Menu -->
+  <div id='menu'>
+    <!-- Create form -->
+    <form>
+      <div class="row">
+        <div class="form-input col-6 col-s-12">
+          <label for="input_nickname">Nick name:</label><br>
+          <input type="text" id="input_nickname" name="nickname">
+         </div>
+        <div class="form-input col-6 col-s-12">
+          <label for="input_gender">Gender:</label><br>
+          <select id="input_gender" name="gender">
+            <option value="M">M</option>
+            <option value="F" selected>F</option>
+            <option value="0">NO Binary</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-input col-6 col-s-12">
+          <label for="input_starship">Starship:</label><br>
+          <select id="input_starship" name="select">
+            <option value="value1">Type 1</option>
+            <option value="value2" selected>Type 2</option>
+            <option value="value3">Type 3</option>
+            <option value="value4">Type 4</option>
+          </select>
+         </div>
+        <div class="form-input col-6 col-s-12">
+          <label for="input_team">Team:</label><br>
+          <select id="input_team" name="select">
+            <option value="klingon">Klingon</option>
+            <option value="federation" selected>Federation</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-input col-12 col-s-12">
+          <button>Create</button>
+        </div>
+      </div>
+    </form>
+    <!-- End Create form -->
+    <hr>
+    <!-- Join form -->
+    <form>
+      <div class="row">
+        <div class="form-input col-12 col-s-12">
+          <label for="input_gamecode">Game code:</label><br>
+          <input type="text" id="input_gamecode" name="nickname">
+         </div>
+      </div>
+      <div class="row">
+        <div class="form-input col-6 col-s-12">
+          <label for="input_nickname_join">Nick name:</label><br>
+          <input type="text" id="input_nickname_join" name="nickname">
+         </div>
+        <div class="form-input col-6 col-s-12">
+          <label for="input_gender_join">Gender:</label><br>
+          <select id="input_gender_join" name="gender">
+            <option value="M">M</option>
+            <option value="F" selected>F</option>
+            <option value="0">NO Binary</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-input col-6 col-s-12">
+          <label for="input_starship_join">Starship:</label><br>
+          <select id="input_starship_join" name="select">
+            <option value="value1">Type 1</option>
+            <option value="value2" selected>Type 2</option>
+            <option value="value3">Type 3</option>
+            <option value="value4">Type 4</option>
+          </select>
+         </div>
+        <div class="form-input col-6 col-s-12">
+          <label for="input_team_join">Team:</label><br>
+          <select id="input_team_join" name="select">
+            <option value="klingon">Klingon</option>
+            <option value="federation" selected>Federation</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-input col-12 col-s-12">
+          <button>Join</button>
+        </div>
+      </div>
+    </form>
+    <!-- End Join form -->    
+  </div>
+  <!-- End Menu -->
+  <!-- Game -->
   <div id='galaxy'></div>
+  <!-- End Game -->
 </body>
 
 </html>
