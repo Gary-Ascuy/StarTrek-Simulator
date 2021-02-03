@@ -18,13 +18,13 @@
   <script src="./scripts/main.js"></script>
 </head>
 
-<body onload="main()">
+<body>
   <h1 class="title">StarTrek-Simulator</h1>
   <noscript>Your browser does not support JavaScript!</noscript>
   <!-- Menu -->
   <div id='menu'>
     <!-- Create form -->
-    <form>
+    <form onsubmit="sendForm();return false">
       <div class="row">
         <div class="form-input col-6 col-s-12">
           <label for="input_nickname">Nick name:</label><br>
@@ -66,7 +66,7 @@
     <!-- End Create form -->
     <hr>
     <!-- Join form -->
-    <form>
+    <form  onsubmit="sendForm();return false">
       <div class="row">
         <div class="form-input col-12 col-s-12">
           <label for="input_gamecode">Game code:</label><br>

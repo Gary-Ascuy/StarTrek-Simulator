@@ -100,7 +100,20 @@ function addKeyEvent(batship) {
   })
 }
 
-async function main() {
+
+function sendForm() {
+  var form = document.getElementById("menu");
+  form.style.display = "none";
+
+  var game = document.getElementById("galaxy");
+  game.style.display = "block";
+  
+  connectServer()
+
+}
+
+
+async function connectServer(){
   console.log('Starting Star Trek Simulator')
   const galaxy = document.getElementById('galaxy')
 
