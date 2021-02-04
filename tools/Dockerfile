@@ -2,7 +2,7 @@ FROM rabbitmq:3.8
 LABEL maintainer="Gary Ascuy <gary.ascuy@gmail.com>"
 
 ENV RABBITMQ_DEFAULT_USER admin
-ENV RABBITMQ_DEFAULT_PASS gary
+ENV RABBITMQ_DEFAULT_PASS admin
 
 RUN rabbitmq-plugins enable --offline rabbitmq_management
 RUN rabbitmq-plugins enable --offline rabbitmq_mqtt
