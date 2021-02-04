@@ -7,14 +7,59 @@ const rabbitmqSettings = {
   path: 'ws'
 }
 
-async function connect(options) {
+let myState = {
+  id:null,
+  posx:0,
+  posy:0,
+  angle:90,
+  team:null,
+  starship:null,
+  gender:null,
+  nickname:null,
+}
+
+let gameState = []
+
+let client = null
+
+let room = null
+
+async function connect(options,team) {
+
   try {
-    const client = await RsupMQTT.connect(options)
-    client.subscribe('teamName/topic').on(message => console.log(message.string))
-    client.publish('teamName/topic', 'Hello MQTT')
+    client = await RsupMQTT.connect(options)
+    myState.id = client.clientId
+    client.subscribe('raichu/'+room+'/informNewPosition').on(addNewShip )
+    client.subscribe('raichu/'+room+'/informPositionOld').on(getOldships )
+    client.publish('raichu/'+room+'/informNewPosition',myState)
+    
   } catch (error) {
     console.log(error)
   }
+}
+
+function getOldships(dataIn){
+  var data = JSON.parse(dataIn.string)
+
+  console.log(myState.id)
+  console.log(data.newShip)
+  if(myState.id===data.newShip){
+    gameState.push(data.state)
+  }
+  console.log(gameState)
+}
+
+function addNewShip(dataIn){
+  //add new ship to the game state
+  var data = JSON.parse(dataIn.string)
+
+  
+  if(myState.id!==data.id){
+    gameState.push(data)
+    console.log(gameState)
+    client.publish('raichu/'+room+'/informPositionOld',{newShip:data.id,state:myState})
+  }
+  
 }
 
 class StarShip {
@@ -101,19 +146,37 @@ function addKeyEvent(batship) {
 }
 
 
-function sendForm() {
+async function joinForm() {
+
+  room = document.getElementById("input_gamecode").value;
+  myState.team = document.getElementById("input_team_join").value;
+  myState.nickname = document.getElementById("input_nickname_join").value;
+  myState.gender = document.getElementById("input_gender_join").value;
+  myState.starship = document.getElementById("input_starship_join").value;
+
+  console.log(myState)
+
+  await connect(rabbitmqSettings)
+  console.log('Connecting to RabbitMQ/MQTT over WebSocket')
+
+  changeToGame()
+
+}
+
+function changeToGame(){
   var form = document.getElementById("menu");
   form.style.display = "none";
 
   var game = document.getElementById("galaxy");
   game.style.display = "block";
-  
+
   connectServer()
 
+  
 }
 
 
-async function connectServer(){
+function connectServer(){
   console.log('Starting Star Trek Simulator')
   const galaxy = document.getElementById('galaxy')
 
@@ -126,6 +189,4 @@ async function connectServer(){
   batship.play()
   addKeyEvent(batship)
 
-  console.log('Connecting to RabbitMQ/MQTT over WebSocket')
-  await connect(rabbitmqSettings)
 }
