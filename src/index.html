@@ -15,13 +15,83 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/rsup-mqtt"></script>
-  <script src="./scripts/main.js"></script>
+  <script src="./scripts/login.js"></script>
 </head>
 
 <body onload="main()">
-  <h1 class="title">Hello World</h1>
+  <h1 class="title">Star Trek Simulator</h1>
   <noscript>Your browser does not support JavaScript!</noscript>
-  <div id='galaxy'></div>
+
+  <div id="formularies">
+    <div id="userForm" onsubmit="return false">
+      <h2> Create User </h2>
+      <form class="form-inline" onsubmit="displayGame();return false">
+        <div class="row">
+          <div class="col">
+            <div class="box">
+              <input name="nickName" type="text" placeholder="Nick Name">
+            </div>
+          </div>
+          <div class="col">
+            <div class="box">
+              <select name="gender" id="gender">
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="nonBinary">Non Binary</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="box">
+                <select name="starShip" id="starship">
+                  <option value="enterprise">USS Entreprise</option>
+                  <option value="miranda">Clase Miranda</option>
+                  <option value="bird">Bird of Prey </option>
+                  <option value="devisor">IKS Devisor </option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <div class="box">
+                <select name="team" id="team">
+                  <option value="klingon">Klingon</option>
+                  <option value="federation">Federation</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2">
+                <div class="box">
+                  <input type="submit" value="Submit">
+                </div>
+              </div>
+            </div>
+      </form>
+    </div>
+
+    <div id="roomForm">
+      <h2> Join Room </h2>
+        <form class="form-inline" onsubmit="return false">
+        <div class="row">
+          <div class="col-2">
+            <div class="box">
+              <input name="code" type="text" placeholder="Game code">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-2">
+              <div class="box">
+                <input type="submit" value="Join">
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
 </body>
 
 </html>
