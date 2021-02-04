@@ -1,3 +1,9 @@
+const SALA = "temp"
+const ID = "1"
+let galaxy = {}
+
+let ships = {}
+
 const rabbitmqSettings = {
   username: 'admin',
   password: 'admin',
@@ -9,17 +15,61 @@ const rabbitmqSettings = {
 
 async function connect(options) {
   try {
+    let test = "";
     const client = await RsupMQTT.connect(options)
-    client.subscribe('teamName/topic').on(message => console.log(message.string))
-    client.publish('teamName/topic', 'Hello MQTT')
+    client.subscribe('teamName/topic1').on(message => {
+
+      const msj = JSON.parse(message.string)
+      
+      switch(msj.type) {
+        case "arrival":
+          console.log("A new contender has just arrived!!!!")
+
+          if(msj.id != ID) {
+            console.log("New ship, id:")
+            console.log(msj.id)
+            const batship = StarShip.createFirstShip(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45, client)
+            ships[msj.id] = batship
+            console.log(msj.id)
+            client.publish('teamName/topic1', { type: "Existence notification", id: ID, x: ships[ID].x, y: ships[ID].y, angle: ships[ID].angle })
+          }
+          break;
+        case "Existence notification":
+          if(msj.id != ID && !(msj.id in ships)) {
+            console.log("A non default test")
+            const batship = StarShip.createFirstShip(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45, client)
+            ships[msj.id] = batship
+            ships[msj.id].setPosition(msj.x, msj.y)
+            ships[msj.id].setAngle(msj.angle)
+            console.log(msj.id)
+            console.log(ships[msj.id])
+          }
+          break;
+        case "Ship movement":
+          console.log("Someone just moved..")
+          console.log(msj.id)
+
+          if(msj.id != ID) {
+            ships[msj.id].setPosition(msj.x, msj.y)
+            ships[msj.id].setAngle(msj.angle)
+          }
+          break;
+          
+        default:
+          console.log("A default test")
+      }
+    })
+    client.publish('teamName/topic1', { type: "arrival", id: ID })
+    return client
   } catch (error) {
     console.log(error)
   }
 }
 
 class StarShip {
-  constructor(el, x = 0, y = 0, angle = 0) {
+  constructor(el, x = 0, y = 0, angle = 0, client) {
     this.el = el
+    this.client = client
 
     this.setState()
     this.setAngle(angle)
@@ -57,8 +107,13 @@ class StarShip {
       const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go
       const y = this.y - Math.cos(this.angle / 360.0 * 2 * Math.PI) * go
   
-      this.setPosition(x, y)
-      this.setAngle(angle)
+      //this.setPosition(x, y)
+      //this.setAngle(angle)
+
+      ships[ID].setPosition(x, y)
+      ships[ID].setAngle(angle)
+
+      client.publish('teamName/topic1', { type: "Ship movement", id: ID, x: x, y: y, angle: angle })
     }, 30)
   }
 
@@ -66,17 +121,19 @@ class StarShip {
     clearInterval(this.timer)
   }
 
-  static create(parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
+  static createFirstShip(parent, imagePath, extraClass, x = 0, y = 0, angle = 0, client) {
     const img = document.createElement('img')
     img.className = `starship ${extraClass}`
     img.src = imagePath
     parent.appendChild(img)
+    // client.publish('teamName/topic1', JSON.stringify({ type: "Ship creation", img, x, y, angle }))
 
     return new StarShip(img, x, y, angle)
   }
+
 }
 
-function addKeyEvent(batship) {
+function addKeyEvent(batship, client) {
   const up = ['w', 'ArrowUp']
   const down = ['s', 'ArrowDown']
   const left = ['a', 'ArrowLeft']
@@ -98,21 +155,31 @@ function addKeyEvent(batship) {
     if (go.indexOf(e.key) >= 0) batship.setState(0, batship.state.direction)
     if (direction.indexOf(e.key) >= 0) batship.setState(batship.state.go, 0)
   })
+
+  // const xPos = batship.x
+  // const yPos = batship.y
+  // client.publish('teamName/topic1', { type: "Ship movement", id: ID, x: xPos, y: yPos })
 }
 
 async function main() {
   console.log('Starting Star Trek Simulator')
-  const galaxy = document.getElementById('galaxy')
-
-  console.log('Creating USS Enterprise element')
-  const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 0, 0, 90)
-  enterprise.play()
-  enterprise.setState(1, 0)
-
-  const batship = StarShip.create(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45)
-  batship.play()
-  addKeyEvent(batship)
+  //const galaxy = document.getElementById('galaxy')
+  galaxy = document.getElementById('galaxy')
 
   console.log('Connecting to RabbitMQ/MQTT over WebSocket')
-  await connect(rabbitmqSettings)
+  client = await connect(rabbitmqSettings)
+
+  //console.log('Creating USS Enterprise element')
+  //const enterprise = StarShip.createFirstShip(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 0, 0, 90, client)
+  //enterprise.play()
+  //enterprise.setPosition(57, 0)
+  //enterprise.setAngle(50)
+
+  const batship = StarShip.createFirstShip(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45, client)
+  batship.play()
+  addKeyEvent(batship, client)
+
+  ships[ID] = batship
+  console.log(ships[ID])
+  
 }
