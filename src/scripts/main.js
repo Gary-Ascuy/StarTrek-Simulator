@@ -1,8 +1,8 @@
 const rabbitmqSettings = {
   username: 'admin',
   password: 'admin',
-  host: 'frontend.ascuy.me',
-  port: 15675,
+  host: 'http://localhost/',
+  port: 15672,
   keepalive: 20,
   path: 'ws'
 }
@@ -10,13 +10,13 @@ const rabbitmqSettings = {
 async function connect(options) {
   try {
     const client = await RsupMQTT.connect(options)
-    client.subscribe('teamName/topic').on(message => console.log(message.string))
-    client.publish('teamName/topic', 'Hello MQTT')
+    client.subscribe('prueba/topic').on(message => console.log(message.string))
+    client.publish('prueba/topic', 'Hello MQTT')
   } catch (error) {
     console.log(error)
   }
-}
 
+}
 class StarShip {
   constructor(el, x = 0, y = 0, angle = 0) {
     this.el = el
@@ -37,6 +37,17 @@ class StarShip {
   }
 
   setPosition(x, y) {
+
+    const ship_width = document.getElementsByClassName(this.el.className)[0].width
+    const ship_height = document.getElementsByClassName(this.el.className)[0].height
+    const window_width= document.getElementById('galaxy').clientWidth
+    const window_height= document.getElementById('galaxy').clientHeight
+
+    if (x <= 0) x = window_width -(ship_width+1);
+    if (x +ship_width >= window_width) x = 0;
+
+    if (y <= 0) y = window_height -(ship_height+1);
+    if (y +ship_height >= window_height) y=0;
     this.x = x
     this.y = y
 
@@ -53,13 +64,14 @@ class StarShip {
       const { go, direction } = this.state  
       if (go === 0 && direction === 0) return;
 
+
       const angle = (this.angle + direction) % 360
       const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go
       const y = this.y - Math.cos(this.angle / 360.0 * 2 * Math.PI) * go
   
       this.setPosition(x, y)
       this.setAngle(angle)
-    }, 30)
+    }, 10)
   }
 
   stop() {
@@ -105,11 +117,11 @@ async function main() {
   const galaxy = document.getElementById('galaxy')
 
   console.log('Creating USS Enterprise element')
-  const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 0, 0, 90)
+  const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 1, 1, 90)
   enterprise.play()
-  enterprise.setState(1, 0)
+  enterprise.setState(1, 0) 
 
-  const batship = StarShip.create(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45)
+  const batship = StarShip.create(galaxy, './assets/spaceship/batship.png', 'small batship', 80, 300, 45)
   batship.play()
   addKeyEvent(batship)
 
