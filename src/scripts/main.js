@@ -13,7 +13,7 @@ let myState = {
   posy:0,
   angle:90,
   team:null,
-  starship:null,
+  ship:null,
   gender:null,
   nickname:null,
 }
@@ -41,12 +41,13 @@ async function connect(options,team) {
 function getOldships(dataIn){
   var data = JSON.parse(dataIn.string)
 
-  console.log(myState.id)
-  console.log(data.newShip)
   if(myState.id===data.newShip){
     gameState.push(data.state)
+    paintOtherShip(data.state)
   }
+
   console.log(gameState)
+  
 }
 
 function addNewShip(dataIn){
@@ -56,7 +57,7 @@ function addNewShip(dataIn){
   
   if(myState.id!==data.id){
     gameState.push(data)
-    console.log(gameState)
+    paintOtherShip(data)
     client.publish('raichu/'+room+'/informPositionOld',{newShip:data.id,state:myState})
   }
   
@@ -152,15 +153,16 @@ async function joinForm() {
   myState.team = document.getElementById("input_team_join").value;
   myState.nickname = document.getElementById("input_nickname_join").value;
   myState.gender = document.getElementById("input_gender_join").value;
-  myState.starship = document.getElementById("input_starship_join").value;
+  myState.ship = document.getElementById("input_starship_join").value;
 
   console.log(myState)
 
-  await connect(rabbitmqSettings)
+  connect(rabbitmqSettings)
+  
   console.log('Connecting to RabbitMQ/MQTT over WebSocket')
 
   changeToGame()
-
+    
 }
 
 function changeToGame(){
@@ -170,23 +172,30 @@ function changeToGame(){
   var game = document.getElementById("galaxy");
   game.style.display = "block";
 
-  connectServer()
-
+  paintShip()
   
 }
 
 
-function connectServer(){
+function paintShip(){
   console.log('Starting Star Trek Simulator')
   const galaxy = document.getElementById('galaxy')
 
-  console.log('Creating USS Enterprise element')
-  const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 0, 0, 90)
-  enterprise.play()
-  enterprise.setState(1, 0)
+  console.log('Creating your ship')
+  const player = StarShip.create(galaxy, './assets/spaceship/'+myState.ship+'.png','small batship', myState.posx, myState.posy, myState.angle)
+  player.play()
+  addKeyEvent(player)
 
-  const batship = StarShip.create(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45)
-  batship.play()
-  addKeyEvent(batship)
+}
+
+
+function paintOtherShip(state){
+  
+
+  const galaxy = document.getElementById('galaxy')
+
+  const ship = StarShip.create(galaxy, './assets/spaceship/'+state.ship+'.png', 'small batship', state.posx, state.posy, state.angle)
+  ship.play()      
+  
 
 }
