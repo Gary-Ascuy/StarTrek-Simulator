@@ -5,19 +5,30 @@ const rabbitmqSettings = {
   username: 'admin',
   password: 'admin',
   host: 'http://localhost/',
-  port: 15672,
+  port: 15675,
   keepalive: 20,
   path: 'ws'
+}
+
+async function connect(options) {
+  try {
+    const client = await RsupMQTT.connect(options)
+    client.subscribe('dragonite/' + room).on(message => console.log(message.string))
+    client.publish('dragonite/' + room, 'Room '+ room)
+  } catch (error) {
+    console.log(error)
+  }
+
 }
 //--------------------------------
 class Bullet {
   constructor(el, x = 0, y = 0, angle = 0) {
     this.el = el
-
     this.setState()
     this.setAngle(angle)
     this.setPosition(x, y)
     this.setVisibility(true)
+    this.setTim
   }
 
   setState(go = 0, direction = 0) {
@@ -30,23 +41,33 @@ class Bullet {
   }
 
   setPosition(x, y) {
+
+    const ship_width = document.getElementsByClassName(this.el.className)[0].width
+    const ship_height = document.getElementsByClassName(this.el.className)[0].height
+    const window_width= document.getElementById('galaxy').clientWidth
+    const window_height= document.getElementById('galaxy').clientHeight
+
+    if (x <= 0) x = window_width -(ship_width+1);
+    if (x +ship_width >= window_width) x = 0;
+
+    if (y <= 0) y = window_height -(ship_height+1);
+    if (y +ship_height >= window_height) y=0;
+    
     this.x = x
     this.y = y
 
     this.el.style.left = `${x}px`
     this.el.style.top = `${y}px`
 
-    // console.log("x: ", x, ", y ", y)
   }
 
   setVisibility(visible) {
-    this.el.style.visibility = visible ? 'visible' : 'hidden'
+    this.el.style.visibility = 'visible'
   }
 
   play() {
     this.timer = setInterval(()=> {
-      const { go, direction } = this.state  
-      if (go === 0 && direction === 0) return;
+      const { go, direction } = this.state 
 
       const angle = (this.angle + direction) % 360
       const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go
@@ -54,41 +75,22 @@ class Bullet {
   
       this.setPosition(x, y)
       this.setAngle(angle)
-    }, 0.3)
+    }, 10)
   }
 
   stop() {
     clearInterval(this.timer)
   }
 
-  static create(parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
+  static create(parent, imagePath, x = 0, y = 0, angle = 0) {
     const img = document.createElement('img')
-    // img.className = `starship ${extraClass}`
     img.className = `bullet`
     img.src = imagePath
     parent.appendChild(img)
-
-    return new StarShip(img, x, y, angle)
+    return new Bullet(img, x, y, angle)
   }
 }
 
-function createBullet() {   
-  const bullet = StarShip.create(galaxy, './assets/spaceship/bullet.png', 'bullet', 0, 0, 45)
-  bullet.play()  
-  return bullet;
-}
-
-//--------------------------------
-async function connect(options) {
-  try {
-    const client = await RsupMQTT.connect(options)
-    client.subscribe('dragonite/' + room).on(message => console.log(message.string))
-    client.publish('dragonite/' + room, 'Room '+ room)
-  } catch (error) {
-    console.log(error)
-  }
-
-}
 class StarShip {
   constructor(el, x = 0, y = 0, angle = 0) {
     this.el = el
@@ -126,7 +128,6 @@ class StarShip {
     this.el.style.left = `${x}px`
     this.el.style.top = `${y}px`
 
-    // console.log("x: ", x, ", y ", y)
   }
 
   getX(){
@@ -157,7 +158,7 @@ class StarShip {
   
       this.setPosition(x, y)
       this.setAngle(angle)
-    }, 10)
+    }, 30)
   }
 
   stop() {
@@ -169,7 +170,6 @@ class StarShip {
     img.className = `starship ${extraClass}`
     img.src = imagePath
     parent.appendChild(img)
-
     return new StarShip(img, x, y, angle)
   }
 }
@@ -193,10 +193,9 @@ function addKeyEvent(batship) {
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
 
     if (space.indexOf(e.key) >= 0) {
-      bullet = createBullet()
-      bullet.setPosition(batship.getX(), batship.getY())
-      bullet.setAngle(batship.getAngle())
-      bullet.setState(1,0)      
+      const bullet = Bullet.create(galaxy, './assets/spaceship/bullet.png', batship.getX(), batship.getY(), batship.getAngle())
+      bullet.play()
+      bullet.setState(1, 0)
     }
   })
 
