@@ -42,6 +42,11 @@ img.starship.small {
   height: 50px;
 }
 
+img.bullet {
+  width: 30px;
+  height: 20px;
+}
+
 .row {
   width: 100%;
   margin: auto;

@@ -73,7 +73,6 @@ class Bullet {
 }
 
 function createBullet() {   
-  console.log('Creating a bullet')
   const bullet = StarShip.create(galaxy, './assets/spaceship/bullet.png', 'bullet', 0, 0, 45)
   bullet.play()  
   return bullet;
@@ -194,7 +193,6 @@ function addKeyEvent(batship) {
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
 
     if (space.indexOf(e.key) >= 0) {
-      console.log("space")
       bullet = createBullet()
       bullet.setPosition(batship.getX(), batship.getY())
       bullet.setAngle(batship.getAngle())
@@ -220,8 +218,6 @@ async function main() {
   const batship = StarShip.create(galaxy, './assets/spaceship/batship.png', 'small batship', 80, 300, 45)
   batship.play()
   addKeyEvent(batship)
-
-  document.getElementById('room').innerHTML = 'Room #' + room;
 
   console.log('Connecting to RabbitMQ/MQTT over WebSocket')
   await connect(rabbitmqSettings)
