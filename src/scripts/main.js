@@ -5,15 +5,8 @@ const rabbitmqSettings = {
   username: 'admin',
   password: 'admin',
   host: 'http://localhost/',
-  port: 15672,
   keepalive: 20,
   path: 'ws'
-}
-
-function createBullet() {   
-  const bullet = StarShip.create(galaxy, './assets/spaceship/bullet.png', 'bullet', 0, 0, 45)
-  bullet.play()  
-  return bullet;
 }
 
 async function connect(options) {
@@ -46,10 +39,9 @@ function addKeyEvent(batship) {
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
 
     if (space.indexOf(e.key) >= 0) {
-      bullet = createBullet()
-      bullet.setPosition(batship.getX(), batship.getY())
-      bullet.setAngle(batship.getAngle())
-      bullet.setState(1,0)      
+      const bullet = Bullet.create(galaxy, './assets/spaceship/bullet.png', batship.getX(), batship.getY(), batship.getAngle())
+      bullet.play()
+      bullet.setState(1, 0)
     }
   })
 
