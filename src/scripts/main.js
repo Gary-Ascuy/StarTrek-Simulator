@@ -7,7 +7,7 @@ const rabbitmqSettings = {
   path: 'ws'
 }
 
-let myState = {
+/*let myState = {
   id:null,
   posx:0,
   posy:0,
@@ -16,22 +16,23 @@ let myState = {
   ship:null,
   gender:null,
   nickname:null,
-}
+}*/
 
 let gameState = []
-
+let starShips = []
 let client = null
-
 let room = null
+let player = null
+let starShip = null
 
-async function connect(options,team) {
-
+async function connect(options) {
   try {
     client = await RsupMQTT.connect(options)
-    myState.id = client.clientId
-    client.subscribe('raichu/'+room+'/informNewPosition').on(addNewShip )
-    client.subscribe('raichu/'+room+'/informPositionOld').on(getOldships )
-    client.publish('raichu/'+room+'/informNewPosition',myState)
+    player.id = client.clientId
+    client.subscribe('raichu/'+room.id+'/informNewPosition').on(addNewShip )
+    client.subscribe('raichu/'+room.id+'/informPositionOld').on(getOldships )
+    client.subscribe('raichu/'+room.id+'/positions').on(changePosition)
+    client.publish('raichu/'+room.id+'/informNewPosition', player)
     
   } catch (error) {
     console.log(error)
@@ -41,9 +42,9 @@ async function connect(options,team) {
 function getOldships(dataIn){
   var data = JSON.parse(dataIn.string)
 
-  if(myState.id===data.newShip){
-    gameState.push(data.state)
-    paintOtherShip(data.state)
+  if(player.id===data.newShip){
+    gameState.push(data.player)
+    paintOtherShip(data.player)
   }
 
   console.log(gameState)
@@ -54,73 +55,27 @@ function addNewShip(dataIn){
   //add new ship to the game state
   var data = JSON.parse(dataIn.string)
 
-  
-  if(myState.id!==data.id){
+  if(player.id !== data.id){
     gameState.push(data)
     paintOtherShip(data)
-    client.publish('raichu/'+room+'/informPositionOld',{newShip:data.id,state:myState})
+    client.publish('raichu/'+room.id+'/informPositionOld',{newShip:data.id, player})
   }
   
 }
 
-class StarShip {
-  constructor(el, x = 0, y = 0, angle = 0) {
-    this.el = el
-
-    this.setState()
-    this.setAngle(angle)
-    this.setPosition(x, y)
-    this.setVisibility(true)
-  }
-
-  setState(go = 0, direction = 0) {
-    this.state = { go, direction }
-  }
-
-  setAngle(angle) {
-    this.angle = angle
-    this.el.style.transform = `rotate(${angle}deg)`
-  }
-
-  setPosition(x, y) {
-    this.x = x
-    this.y = y
-
-    this.el.style.left = `${x}px`
-    this.el.style.top = `${y}px`
-  }
-
-  setVisibility(visible) {
-    this.el.style.visibility = visible ? 'visible' : 'hidden'
-  }
-
-  play() {
-    this.timer = setInterval(()=> {
-      const { go, direction } = this.state  
-      if (go === 0 && direction === 0) return;
-
-      const angle = (this.angle + direction) % 360
-      const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go
-      const y = this.y - Math.cos(this.angle / 360.0 * 2 * Math.PI) * go
+function changePosition(dataIn){
   
-      this.setPosition(x, y)
-      this.setAngle(angle)
-    }, 30)
-  }
-
-  stop() {
-    clearInterval(this.timer)
-  }
-
-  static create(parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
-    const img = document.createElement('img')
-    img.className = `starship ${extraClass}`
-    img.src = imagePath
-    parent.appendChild(img)
-
-    return new StarShip(img, x, y, angle)
-  }
+  starShips.forEach(starShip => {
+    if(starShip.id === dataIn.starShip_id ){
+      starShip.x = dataIn.x;
+      starShip.y = dataIn.y;
+      starShip.angle = dataIn.angle;
+      starShip.play();
+    }
+  });
+  
 }
+
 
 function addKeyEvent(batship) {
   const up = ['w', 'ArrowUp']
@@ -143,25 +98,53 @@ function addKeyEvent(batship) {
   document.body.addEventListener('keyup', (e) => {
     if (go.indexOf(e.key) >= 0) batship.setState(0, batship.state.direction)
     if (direction.indexOf(e.key) >= 0) batship.setState(batship.state.go, 0)
+
+    let data = { x : starShip.x,
+      y : starShip.y,
+      angle : starShip.angle,
+      starShip_id : starShip.id}
+
+    client.publish('raichu/'+room.id+'/positions', data)
+
   })
 }
 
+async function createRoom(){
+  let team = document.getElementById("input_team").value;
+  let nickname = document.getElementById("input_nickname").value;
+  let gender = document.getElementById("input_gender").value;
+  let ship = document.getElementById("input_starship").value;
+  
+  player = new Player(nickname, gender, null, team)
+  room = new Room();
+  starShip = StarShip.create(galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
+  player.setStartship(starShip)
+
+  connect(rabbitmqSettings)
+  changeToGame();
+  player.starship.play()
+  addKeyEvent(player.starship)
+
+}
 
 async function joinForm() {
 
-  room = document.getElementById("input_gamecode").value;
-  myState.team = document.getElementById("input_team_join").value;
-  myState.nickname = document.getElementById("input_nickname_join").value;
-  myState.gender = document.getElementById("input_gender_join").value;
-  myState.ship = document.getElementById("input_starship_join").value;
-
-  console.log(myState)
+  let idRoom = document.getElementById("input_gamecode").value;
+  let team = document.getElementById("input_team_join").value;
+  let nickname = document.getElementById("input_nickname_join").value;
+  let gender = document.getElementById("input_gender_join").value;
+  let ship = document.getElementById("input_starship_join").value;
+  
+  player = new Player(nickname, gender, null, team)
+  room = new Room();
+  room.id = idRoom;
+  starShip = StarShip.create(galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
+  player.setStartship(starShip)
 
   connect(rabbitmqSettings)
-  
-  console.log('Connecting to RabbitMQ/MQTT over WebSocket')
-
-  changeToGame()
+  changeToGame();
+  player.starship.play()
+  addKeyEvent(player.starship)
     
 }
 
@@ -169,33 +152,22 @@ function changeToGame(){
   var form = document.getElementById("menu");
   form.style.display = "none";
 
+  var idRoom =  document.getElementById("id_room");
+  idRoom.textContent = " Id Room:  " + room.id;
+  idRoom.style.display = "block"
+
   var game = document.getElementById("galaxy");
   game.style.display = "block";
-
-  paintShip()
   
 }
 
 
-function paintShip(){
-  console.log('Starting Star Trek Simulator')
-  const galaxy = document.getElementById('galaxy')
-
-  console.log('Creating your ship')
-  const player = StarShip.create(galaxy, './assets/spaceship/'+myState.ship+'.png','small batship', myState.posx, myState.posy, myState.angle)
-  player.play()
-  addKeyEvent(player)
-
-}
-
-
-function paintOtherShip(state){
-  
-
-  const galaxy = document.getElementById('galaxy')
-
-  const ship = StarShip.create(galaxy, './assets/spaceship/'+state.ship+'.png', 'small batship', state.posx, state.posy, state.angle)
-  ship.play()      
+function paintOtherShip(player){
+  let galaxy = document.getElementById('galaxy')
+  let ship = StarShip.create(galaxy, player.starship.imagePath, 'small batship' , player.starship.x, player.starship.y, player.starship.angle)
+  console.log(ship)
+  starShips.push(ship);
+  starShips[starShips.length-1].play();     
   
 
 }
