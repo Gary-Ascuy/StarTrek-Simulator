@@ -15,6 +15,9 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/rsup-mqtt"></script>
+  <script src="./scripts/player.js"></script>
+  <script src="./scripts/room.js"></script>
+  <script src="./scripts/starShip.js"></script>
   <script src="./scripts/main.js"></script>
 </head>
 
@@ -24,7 +27,7 @@
   <!-- Menu -->
   <div id='menu'>
     <!-- Create form -->
-    <form onsubmit="joinForm();return false">
+    <form onsubmit="createRoom();return false">
       <div class="row">
         <div class="form-input col-6 col-s-12">
           <label for="input_nickname">Nick name:</label><br>
@@ -43,10 +46,10 @@
         <div class="form-input col-6 col-s-12">
           <label for="input_starship">Starship:</label><br>
           <select id="input_starship" name="select">
-            <option value="Batship">Batship</option>
-            <option value="Battleship" selected>Battleship</option>
-            <option value="Spaceship">Spaceship</option>
-            <option value="USSEnterprice">USSEnterprice</option>
+            <option value="batship">Batship</option>
+            <option value="battleship" selected>Battleship</option>
+            <option value="spaceship">Spaceship</option>
+            <option value="ussenterprise">USSEnterprice</option>
           </select>
          </div>
         <div class="form-input col-6 col-s-12">
@@ -115,6 +118,7 @@
   </div>
   <!-- End Menu -->
   <!-- Game -->
+  <div id='id_room'> </div>
   <div id='galaxy'></div>
   <!-- End Game -->
 </body>
