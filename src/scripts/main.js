@@ -1,5 +1,4 @@
 const room = "001";
-let idGamer = ""
 
 const rabbitmqSettings = {
   username: 'admin',
@@ -39,7 +38,8 @@ function addKeyEvent(batship) {
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
 
     if (space.indexOf(e.key) >= 0) {
-      const bullet = Bullet.create(galaxy, './assets/spaceship/bullet.png', batship.getX(), batship.getY(), batship.getAngle())
+      const bulletId = Date.now()
+      const bullet = Bullet.create(galaxy, './assets/spaceship/bullet.png', batship.getX(), batship.getY(), batship.getAngle(), bulletId)
       bullet.play()
       bullet.setState(1, 0)
     }

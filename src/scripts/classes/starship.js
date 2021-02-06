@@ -6,6 +6,7 @@ class StarShip {
     this.setAngle(angle)
     this.setPosition(x, y)
     this.setVisibility(true)
+    this.speed = 4
   }
 
   setState(go = 0, direction = 0) {
@@ -60,12 +61,12 @@ class StarShip {
 
 
       const angle = (this.angle + direction) % 360
-      const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go
-      const y = this.y - Math.cos(this.angle / 360.0 * 2 * Math.PI) * go
+      const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go * this.speed
+      const y = this.y - Math.cos(this.angle / 360.0 * 2 * Math.PI) * go * this.speed
   
       this.setPosition(x, y)
       this.setAngle(angle)
-    }, 30)
+    }, 1000/24)
   }
 
   stop() {
