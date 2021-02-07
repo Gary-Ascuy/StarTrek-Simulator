@@ -74,6 +74,7 @@ class Bullet {
     }
     else{
       this.setState(0, 0)
+      this.stop()
       document.getElementById(this.el.id).remove()
       Bullet.bullet_list.splice(this.el.id -1,  1);
     }
@@ -91,6 +92,10 @@ class Bullet {
       this.setPosition(x, y)
       this.setAngle(angle)
     }, 10)
+  }
+
+  stop() {
+    clearInterval(this.timer);
   }
 
   static create(parent, imagePath, x = 0, y = 0, angle = 0) {
