@@ -78,7 +78,7 @@ class Bullet {
       listPlayers.forEach(player => {
         if (Math.hypot(player.x - this.x, player.y - this.y) < player.radio + this.radio){
           this.setVisibility(false)
-          this.stop()
+          this.stop() // Detiene la bala
           console.log("Me dieron!!!!")
         } 
       }

@@ -115,7 +115,7 @@ async function main() {
   client = await connect(rabbitmqSettings)
   
   console.log('Creating USS Enterprise element')
-  const enterprise = StarShip.create(galaxy, SPRITEPATH, 'small batship', 10, 10, 90)
+  const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 1, 1, 90)
   enterprise.play()
   enterprise.setState(1, 0) 
 
