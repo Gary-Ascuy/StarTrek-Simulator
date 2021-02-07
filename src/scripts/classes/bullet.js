@@ -1,12 +1,14 @@
 class Bullet {
+  static bullet_list = []
   constructor(el, x = 0, y = 0, angle = 0, id) {
     this.el = el
     this.setState()
     this.setAngle(angle)
     this.setPosition(x, y)
     this.setVisibility(true)
-    this.setTim
     this.speed = 7
+    Bullet.bullet_list.push(this)
+    this.radio = (document.getElementsByClassName(this.el.className)[0].width)/2
   }
 
   setState(go = 0, direction = 0) {
@@ -40,14 +42,23 @@ class Bullet {
       this.x = x
       this.y = y
 
-      this.el.style.left = `${x + 18}px`
-      this.el.style.top = `${y + 18}px`
+      this.el.style.left = `${x}px`
+      this.el.style.top = `${y}px`
     }
   }
 
   setVisibility(visible) {
-    this.el.style.visibility = 'visible'
+    if (visible) {
+      this.el.style.visibility = 'visible'
+    }
+    else{
+      this.setState(0, 0)
+      this.stop()
+      document.getElementById(this.el.id).remove()
+      Bullet.bullet_list.splice(this.el.id -1,  1);
+    }
   }
+
 
   play() {
     this.timer = setInterval(()=> { 
@@ -73,7 +84,7 @@ class Bullet {
       let bullet = document.getElementById(id)
       bullet.parentNode.removeChild(bullet);
       clearInterval(ttl)
-    }, 2500);
+    }, 2000);
 
     // creation of the element 'bullet' in the DOM
     const img = document.createElement('img')
@@ -82,5 +93,6 @@ class Bullet {
     img.src = imagePath
     parent.appendChild(img)
     return new Bullet(img, x, y, angle)
+
   }
 }
