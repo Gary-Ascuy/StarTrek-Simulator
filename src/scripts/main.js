@@ -1,5 +1,10 @@
 const SALA = "temp"
 const ID = "1"
+const NICKNAME = "SHA"
+const GENDER = "M"
+const SPRITEPATH = './assets/spaceship/batship.png'
+const TEAM = "1"
+
 let galaxy = {}
 
 let ships = {}
@@ -28,16 +33,16 @@ async function connect(options) {
           if(msj.id != ID) {
             console.log("New ship, id:")
             console.log(msj.id)
-            const batship = StarShip.createFirstShip(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45, client)
+            const batship = StarShip.createShip(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45)
             ships[msj.id] = batship
             console.log(msj.id)
-            client.publish('teamName/topic1', { type: "Existence notification", id: ID, x: ships[ID].x, y: ships[ID].y, angle: ships[ID].angle })
+            client.publish('teamName/topic1', { type: "Existence notification", id: ID, x: ships[ID].x, y: ships[ID].y, angle: ships[ID].angle, sprite: SPRITEPATH })
           }
           break;
         case "Existence notification":
           if(msj.id != ID && !(msj.id in ships)) {
             console.log("A non default test")
-            const batship = StarShip.createFirstShip(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45, client)
+            const batship = StarShip.createShip(galaxy, msj.sprite, 'small batship', 200, 200, 45)
             ships[msj.id] = batship
             ships[msj.id].setPosition(msj.x, msj.y)
             ships[msj.id].setAngle(msj.angle)
@@ -106,9 +111,6 @@ class StarShip {
       const angle = (this.angle + direction) % 360
       const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go
       const y = this.y - Math.cos(this.angle / 360.0 * 2 * Math.PI) * go
-  
-      //this.setPosition(x, y)
-      //this.setAngle(angle)
 
       ships[ID].setPosition(x, y)
       ships[ID].setAngle(angle)
@@ -121,19 +123,18 @@ class StarShip {
     clearInterval(this.timer)
   }
 
-  static createFirstShip(parent, imagePath, extraClass, x = 0, y = 0, angle = 0, client) {
+  static createShip(parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
     const img = document.createElement('img')
     img.className = `starship ${extraClass}`
     img.src = imagePath
     parent.appendChild(img)
-    // client.publish('teamName/topic1', JSON.stringify({ type: "Ship creation", img, x, y, angle }))
 
     return new StarShip(img, x, y, angle)
   }
 
 }
 
-function addKeyEvent(batship, client) {
+function addKeyEvent(batship) {
   const up = ['w', 'ArrowUp']
   const down = ['s', 'ArrowDown']
   const left = ['a', 'ArrowLeft']
@@ -156,9 +157,6 @@ function addKeyEvent(batship, client) {
     if (direction.indexOf(e.key) >= 0) batship.setState(batship.state.go, 0)
   })
 
-  // const xPos = batship.x
-  // const yPos = batship.y
-  // client.publish('teamName/topic1', { type: "Ship movement", id: ID, x: xPos, y: yPos })
 }
 
 async function main() {
@@ -175,9 +173,9 @@ async function main() {
   //enterprise.setPosition(57, 0)
   //enterprise.setAngle(50)
 
-  const batship = StarShip.createFirstShip(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45, client)
+  const batship = StarShip.createShip(galaxy, SPRITEPATH, 'small batship', 200, 200, 45)
   batship.play()
-  addKeyEvent(batship, client)
+  addKeyEvent(batship)
 
   ships[ID] = batship
   console.log(ships[ID])
