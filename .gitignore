@@ -8,3 +8,5 @@ tools/data/
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+.directory

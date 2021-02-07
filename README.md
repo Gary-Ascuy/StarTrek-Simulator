@@ -22,6 +22,7 @@ Multiplayer Online Simulator to train Klingon Army
 
 ```
 $ cd tools
+$ docker build -f Dockerfile -t rabbitmq:3.8-web .
 $ docker-compose up
 ```
 
