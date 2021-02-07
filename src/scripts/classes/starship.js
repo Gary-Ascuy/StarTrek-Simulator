@@ -30,6 +30,7 @@ class StarShip {
 
     if (y <= 0) y = window_height -(ship_height+1);
     if (y +ship_height >= window_height) y=0;
+
     this.x = x
     this.y = y
 
@@ -66,6 +67,12 @@ class StarShip {
   
       this.setPosition(x, y)
       this.setAngle(angle)
+
+
+      // ships[ID].setPosition(x, y)
+      // ships[ID].setAngle(angle)
+
+      client.publish('teamName/topic1', { type: "Ship movement", id: ID, x: x, y: y, angle: angle })
     }, 1000/24)
   }
 
@@ -78,6 +85,7 @@ class StarShip {
     img.className = `starship ${extraClass}`
     img.src = imagePath
     parent.appendChild(img)
+   
     return new StarShip(img, x, y, angle)
   }
 }
