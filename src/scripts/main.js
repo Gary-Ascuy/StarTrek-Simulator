@@ -22,7 +22,7 @@ async function connect(options) {
     client.subscribe('raichu/'+room.id+'/positions').on(changePosition)
 
     client.publish('raichu/'+room.id+'/informNewPosition', player)
-    
+    paintUser(player,true)
   } catch (error) {
     console.log(error)
   }
@@ -32,6 +32,7 @@ function getOldShips(dataIn){
   var data = JSON.parse(dataIn.string)
   if(player.id===data.newShip){
     paintOtherShip(data.player)
+    paintUser(data.player)
   }
   
 }
@@ -40,15 +41,50 @@ function addNewShip(dataIn){
   var data = JSON.parse(dataIn.string)
   if(player.id !== data.id){
     paintOtherShip(data)
+    paintUser(data)
     client.publish('raichu/'+room.id+'/informPositionOld',{newShip:data.id, player})
   }
   
 }
 
+
+function paintUser(data,myUser=false){
+
+  const klingon = document.getElementById(data.team)
+
+  const divUser = document.createElement('div')
+  divUser.className = 'user'
+  if(myUser){
+    divUser.style.border = "3px solid red"
+    divUser.style.borderRadius = "10px"
+  }
+  
+  const img = document.createElement('img')
+  img.src = './assets/user/'+data.gender+'.svg'
+  img.className = 'userIcon'
+  
+  const divData = document.createElement('div')
+  
+  const nickname = document.createElement("h4");
+  nickname.textContent = "Nickname:"+data.nickname;
+
+
+  const lives = document.createElement("h4");
+  lives.textContent = "Lives:"+"1";
+
+
+  divData.appendChild(nickname)
+  divData.appendChild(lives)
+  divUser.appendChild(img)
+  divUser.appendChild(divData)
+  klingon.appendChild(divUser)
+
+}
+
 function changePosition(dataIn){
 
   var data = JSON.parse(dataIn.string)
-  
+
   if( otherShips[data.starShip_id] !== undefined && otherShips[data.starShip_id] !== null){
     otherShips[data.starShip_id].setPosition(data.x, data.y);
     otherShips[data.starShip_id].setAngle(data.angle);
@@ -67,10 +103,6 @@ function addKeyEvent(batship) {
   const direction = [...left, ...right]
   const stop = [' ', 'c', 'x']
 
-  let data = { x : starShip.x,
-    y : starShip.y,
-    angle : starShip.angle,
-    starShip_id : player.id}
 
   document.body.addEventListener('keydown', (e) => {
     if (up.indexOf(e.key) >= 0) batship.setState(1, batship.state.direction)
@@ -80,6 +112,11 @@ function addKeyEvent(batship) {
 
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
 
+    let data = { x : starShip.x,
+      y : starShip.y,
+      angle : starShip.angle,
+      starShip_id : player.id}
+
     client.publish('raichu/'+room.id+'/positions', data)
 
   })
@@ -87,8 +124,6 @@ function addKeyEvent(batship) {
   document.body.addEventListener('keyup', (e) => {
     if (go.indexOf(e.key) >= 0) batship.setState(0, batship.state.direction)
     if (direction.indexOf(e.key) >= 0) batship.setState(batship.state.go, 0)
-
-    client.publish('raichu/'+room.id+'/positions', data)
 
   })
 }
@@ -142,6 +177,9 @@ function changeToGame(){
 
   var game = document.getElementById("galaxy");
   game.style.display = "block";
+
+  var player = document.getElementById("players");
+  player.style.display = "inline-flex";
   
 }
 
@@ -149,7 +187,6 @@ function changeToGame(){
 function paintOtherShip(player){
   let galaxy = document.getElementById('galaxy')
   let ship = StarShip.create(player.id, galaxy, player.starship.imagePath, 'small batship' , player.starship.x, player.starship.y, player.starship.angle)
-  console.log(ship);
   otherShips[ship.id] = ship;
   otherShips[ship.id].play();     
   
