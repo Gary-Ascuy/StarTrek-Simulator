@@ -130,40 +130,64 @@ function addKeyEvent(batship) {
 
 async function createRoom(){
   let team = document.getElementById("input_team").value;
-  let nickname = document.getElementById("input_nickname").value;
+  let nickname = document.getElementById("input_nickname");
   let gender = document.getElementById("input_gender").value;
   let ship = document.getElementById("input_starship").value;
   
-  player = new Player(nickname, gender, null, team)
-  room = new Room();
-  starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
-  player.setStartship(starShip)
+  
+  if(nickname.value.length===0){
+    nickname.style.borderColor = "red";
+  }
+  else{
+    player = new Player(nickname.value, gender, null, team)
+    room = new Room();
+    starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
+    player.setStartship(starShip)
 
-  connect(rabbitmqSettings)
-  changeToGame();
-  player.starship.play()
-  addKeyEvent(player.starship)
+    connect(rabbitmqSettings)
+    changeToGame();
+    player.starship.play()
+    addKeyEvent(player.starship)
+
+    nickname.style.borderColor = "white";
+  }
+  
 
 }
 
 async function joinForm() {
 
-  let idRoom = document.getElementById("input_gamecode").value;
+  let idRoom = document.getElementById("input_gamecode");
   let team = document.getElementById("input_team_join").value;
-  let nickname = document.getElementById("input_nickname_join").value;
+  let nickname = document.getElementById("input_nickname_join");
   let gender = document.getElementById("input_gender_join").value;
   let ship = document.getElementById("input_starship_join").value;
   
-  player = new Player(nickname, gender, null, team)
-  room = new Room();
-  room.id = idRoom;
-  starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
-  player.setStartship(starShip)
+  console.log("ENTROO")
+  if(nickname.value.length===0){
+    nickname.style.borderColor = "red";
+  }
+  else nickname.style.borderColor = "white";
 
-  connect(rabbitmqSettings)
-  changeToGame();
-  player.starship.play()
-  addKeyEvent(player.starship)
+  if(idRoom.value.length===0){
+    
+    idRoom.style.borderColor = "red";
+  }
+  else idRoom.style.borderColor = "white";
+
+
+  if(idRoom.value.length!==0 && nickname.value.length!==0){
+    player = new Player(nickname.value, gender, null, team)
+    room = new Room();
+    room.id = idRoom.value;
+    starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
+    player.setStartship(starShip)
+
+    connect(rabbitmqSettings)
+    changeToGame();
+    player.starship.play()
+    addKeyEvent(player.starship)    
+  }
     
 }
 
