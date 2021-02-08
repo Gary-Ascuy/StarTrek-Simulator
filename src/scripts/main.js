@@ -7,17 +7,6 @@ const rabbitmqSettings = {
   path: 'ws'
 }
 
-/*let myState = {
-  id:null,
-  posx:0,
-  posy:0,
-  angle:90,
-  team:null,
-  ship:null,
-  gender:null,
-  nickname:null,
-}*/
-
 let gameState = []
 let starShips = []
 let client = null
@@ -33,7 +22,7 @@ async function connect(options) {
     client.subscribe('raichu/'+room.id+'/informPositionOld').on(getOldships )
     client.subscribe('raichu/'+room.id+'/positions').on(changePosition)
     client.publish('raichu/'+room.id+'/informNewPosition', player)
-    
+    paintUser(player,true)
   } catch (error) {
     console.log(error)
   }
@@ -43,8 +32,10 @@ function getOldships(dataIn){
   var data = JSON.parse(dataIn.string)
 
   if(player.id===data.newShip){
+    
     gameState.push(data.player)
     paintOtherShip(data.player)
+    paintUser(data.player)
   }
 
   console.log(gameState)
@@ -58,9 +49,45 @@ function addNewShip(dataIn){
   if(player.id !== data.id){
     gameState.push(data)
     paintOtherShip(data)
+    paintUser(data)
     client.publish('raichu/'+room.id+'/informPositionOld',{newShip:data.id, player})
   }
   
+}
+
+
+function paintUser(data,myUser=false){
+
+  console.log(data)
+  const klingon = document.getElementById(data.team)
+
+  const divUser = document.createElement('div')
+  divUser.className = 'user'
+  if(myUser){
+    divUser.style.border = "3px solid red"
+    divUser.style.borderRadius = "10px"
+  }
+  
+  const img = document.createElement('img')
+  img.src = './assets/user/'+data.gender+'.svg'
+  img.className = 'userIcon'
+  
+  const divData = document.createElement('div')
+  
+  const nickname = document.createElement("h4");
+  nickname.textContent = "Nickname:"+data.nickname;
+
+
+  const lives = document.createElement("h4");
+  lives.textContent = "Lives:"+"1";
+
+
+  divData.appendChild(nickname)
+  divData.appendChild(lives)
+  divUser.appendChild(img)
+  divUser.appendChild(divData)
+  klingon.appendChild(divUser)
+
 }
 
 function changePosition(dataIn){
@@ -158,6 +185,9 @@ function changeToGame(){
 
   var game = document.getElementById("galaxy");
   game.style.display = "block";
+
+  var player = document.getElementById("players");
+  player.style.display = "inline-flex";
   
 }
 
