@@ -28,11 +28,12 @@ async function connect(options) {
       switch(msj.type) {
         case "arrival":
           console.log("A new contender has just arrived!!!!")
+          console.log(msj.id)
 
           if(msj.id != ID) {
             console.log("New ship, id:")
             console.log(msj.id)
-            const batship = StarShip.createShip(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45)
+            const batship = StarShip.create(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45)
             ships[msj.id] = batship
             console.log(msj.id)
             client.publish('teamName/topic1', { type: "Existence notification", id: ID, x: ships[ID].x, y: ships[ID].y, angle: ships[ID].angle, sprite: SPRITEPATH })
@@ -41,7 +42,7 @@ async function connect(options) {
         case "Existence notification":
           if(msj.id != ID && !(msj.id in ships)) {
             console.log("A non default test")
-            const batship = StarShip.createShip(galaxy, msj.sprite, 'small batship', 200, 200, 45)
+            const batship = StarShip.create(galaxy, msj.sprite, 'small batship', 200, 200, 45)
             ships[msj.id] = batship
             ships[msj.id].setPosition(msj.x, msj.y)
             ships[msj.id].setAngle(msj.angle)
@@ -114,10 +115,10 @@ async function main() {
   console.log('Connecting to RabbitMQ/MQTT over WebSocket')
   client = await connect(rabbitmqSettings)
   
-  console.log('Creating USS Enterprise element')
-  const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 1, 1, 90)
-  enterprise.play()
-  enterprise.setState(1, 0) 
+  //console.log('Creating USS Enterprise element')
+  //const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 1, 1, 90)
+  //enterprise.play()
+  //enterprise.setState(1, 0) 
 
 
   const batship = StarShip.create(galaxy, SPRITEPATH, 'small batship', 200, 200, 45)
