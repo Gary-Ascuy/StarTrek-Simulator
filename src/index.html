@@ -15,21 +15,26 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/rsup-mqtt"></script>
-  <script src="./scripts/login.js"></script>
+  <script src="./scripts/main.js"></script>
+  <script src="./scripts/classes/bullet.js"></script>
+  <script src="./scripts/classes/starship.js"></script>
+  <script src="./scripts/utils.js"></script>
 </head>
 
 <body onload="main()">
   <h1 class="title">Star Trek Simulator</h1>
   <noscript>Your browser does not support JavaScript!</noscript>
 
+  <div id='galaxy'></div>
+
   <div id="formularies">
     <div id="userForm" onsubmit="return false">
       <h2> Create User </h2>
-      <form class="form-inline" onsubmit="displayGame();return false">
+      <form class="form-inline" onsubmit="createRoom();return false">
         <div class="row">
           <div class="col">
             <div class="box">
-              <input name="nickName" type="text" placeholder="Nick Name">
+              <input name="nickName" id="nickName" type="text" placeholder="Nick Name">
             </div>
           </div>
           <div class="col">
@@ -74,11 +79,11 @@
 
     <div id="roomForm">
       <h2> Join Room </h2>
-        <form class="form-inline" onsubmit="return false">
+        <form class="form-inline" onsubmit="joinRoom();return false">
         <div class="row">
           <div class="col-2">
             <div class="box">
-              <input name="code" type="text" placeholder="Game code">
+              <input name="code" id="code" type="text" placeholder="Game code">
             </div>
           </div>
 

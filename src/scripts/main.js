@@ -108,7 +108,15 @@ function addKeyEvent(batship) {
 
 }
 
-async function main() {
+async function loadLogin(){
+  document.getElementById('galaxy').style.display = "none"
+  document.getElementById('formularies').style.display = "block"
+}
+
+async function loadGame(){
+  document.getElementById('galaxy').style.display = "block"
+  document.getElementById('formularies').style.display = "none"
+  
   console.log('Starting Star Trek Simulator')
   galaxy = document.getElementById('galaxy')
 
@@ -127,4 +135,61 @@ async function main() {
 
   ships[ID] = batship
   console.log(ships[ID]) 
+}
+
+function changeGameState(state){
+  switch(state) {
+    case "login":
+      console.log("Changing to login configuration")
+      loadLogin()
+      break;
+    case "game":
+      console.log("Changing to game configuration")
+      loadGame()
+    }
+}
+
+function getFormInfo(){
+  dataDict = {}
+  const nickName = document.getElementById('nickName').value
+  const genderIndex = document.getElementById('gender')
+  const gender = genderIndex.options[genderIndex.selectedIndex].text;
+  const starShipIndex = document.getElementById('starship')
+  const starship = starShipIndex.options[starShipIndex.selectedIndex].text;
+  const teamIndex = document.getElementById('team')
+  const team = teamIndex.options[teamIndex.selectedIndex].text;
+  dataDict["nickName"] = nickName
+  dataDict["gender"] = gender
+  dataDict["starship"] = starship
+  dataDict["team"] = team
+  return dataDict
+}
+
+function createRoom(){
+  console.log('Generating room code')
+  const roomCode = generateRandomMCode()
+  console.log("Room code: " + roomCode)
+  let dataDict = getFormInfo();
+
+  // console.log('Creating a player object')
+  // const player = Player.create(roomCode, dataDict["nickName"], dataDict["gender"], dataDict["starship"], dataDict["team"], "captain")
+
+  changeGameState("game")
+}
+
+function joinRoom(){
+  const roomCode = document.getElementById('code').value
+  let dataDict = getFormInfo();
+
+  // console.log('Creating a player object')
+  // const player = Player.create(roomCode, dataDict["nickName"], dataDict["gender"], dataDict["starship"], dataDict["team"], "soldier")
+
+  changeGameState("game")
+}
+
+async function main() {
+  console.log('Welcome to our Star Trek Simulator!')
+  document.getElementById('formularies').style.display = "none"
+  document.getElementById('galaxy').style.display = "none"
+  changeGameState("login")
 }
