@@ -99,6 +99,7 @@ function addKeyEvent(batship) {
   const down = ['s', 'ArrowDown']
   const left = ['a', 'ArrowLeft']
   const right = ['d', 'ArrowRight']
+  const shoot = ['p', 'Shoot']
   const go = [...up, ...down]
   const direction = [...left, ...right]
   const stop = [' ', 'c', 'x']
@@ -111,6 +112,7 @@ function addKeyEvent(batship) {
     if (right.indexOf(e.key) >= 0) batship.setState(batship.state.go, 1)
 
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
+    if (shoot.indexOf(e.key) >= 0) batship.fireLaser()
 
     let data = { x : starShip.x,
       y : starShip.y,
