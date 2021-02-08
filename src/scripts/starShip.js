@@ -1,6 +1,6 @@
 class StarShip {
-    constructor(el, x = 0, y = 0, angle = 0, imagePath) {
-      this.id = Math.random().toString(36).substr(2, 9);
+    constructor(id, el, x = 0, y = 0, angle = 0, imagePath) {
+      this.id = id
       this.el = el
       this.imagePath = imagePath
       this.setState()
@@ -48,12 +48,12 @@ class StarShip {
       clearInterval(this.timer)
     }
   
-    static create(parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
+    static create(id, parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
       const img = document.createElement('img')
       img.className = `starship ${extraClass}`
       img.src = imagePath
       parent.appendChild(img)
   
-      return new StarShip(img, x, y, angle, imagePath)
+      return new StarShip(id, img, x, y, angle, imagePath)
     }
   }

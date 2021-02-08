@@ -7,20 +7,20 @@ const rabbitmqSettings = {
   path: 'ws'
 }
 
-let gameState = []
-let starShips = []
 let client = null
 let room = null
 let player = null
 let starShip = null
+let otherShips = []
 
 async function connect(options) {
   try {
     client = await RsupMQTT.connect(options)
     player.id = client.clientId
     client.subscribe('raichu/'+room.id+'/informNewPosition').on(addNewShip )
-    client.subscribe('raichu/'+room.id+'/informPositionOld').on(getOldships )
+    client.subscribe('raichu/'+room.id+'/informPositionOld').on(getOldShips )
     client.subscribe('raichu/'+room.id+'/positions').on(changePosition)
+
     client.publish('raichu/'+room.id+'/informNewPosition', player)
     paintUser(player,true)
   } catch (error) {
@@ -28,26 +28,18 @@ async function connect(options) {
   }
 }
 
-function getOldships(dataIn){
+function getOldShips(dataIn){
   var data = JSON.parse(dataIn.string)
-
   if(player.id===data.newShip){
-    
-    gameState.push(data.player)
     paintOtherShip(data.player)
     paintUser(data.player)
   }
-
-  console.log(gameState)
   
 }
 
 function addNewShip(dataIn){
-  //add new ship to the game state
   var data = JSON.parse(dataIn.string)
-
   if(player.id !== data.id){
-    gameState.push(data)
     paintOtherShip(data)
     paintUser(data)
     client.publish('raichu/'+room.id+'/informPositionOld',{newShip:data.id, player})
@@ -58,7 +50,6 @@ function addNewShip(dataIn){
 
 function paintUser(data,myUser=false){
 
-  console.log(data)
   const klingon = document.getElementById(data.team)
 
   const divUser = document.createElement('div')
@@ -91,15 +82,14 @@ function paintUser(data,myUser=false){
 }
 
 function changePosition(dataIn){
-  
-  starShips.forEach(starShip => {
-    if(starShip.id === dataIn.starShip_id ){
-      starShip.x = dataIn.x;
-      starShip.y = dataIn.y;
-      starShip.angle = dataIn.angle;
-      starShip.play();
-    }
-  });
+
+  var data = JSON.parse(dataIn.string)
+
+  if( otherShips[data.starShip_id] !== undefined && otherShips[data.starShip_id] !== null){
+    otherShips[data.starShip_id].setPosition(data.x, data.y);
+    otherShips[data.starShip_id].setAngle(data.angle);
+  }
+
   
 }
 
@@ -113,6 +103,7 @@ function addKeyEvent(batship) {
   const direction = [...left, ...right]
   const stop = [' ', 'c', 'x']
 
+
   document.body.addEventListener('keydown', (e) => {
     if (up.indexOf(e.key) >= 0) batship.setState(1, batship.state.direction)
     if (down.indexOf(e.key) >= 0) batship.setState(-1, batship.state.direction)
@@ -120,18 +111,19 @@ function addKeyEvent(batship) {
     if (right.indexOf(e.key) >= 0) batship.setState(batship.state.go, 1)
 
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
+
+    let data = { x : starShip.x,
+      y : starShip.y,
+      angle : starShip.angle,
+      starShip_id : player.id}
+
+    client.publish('raichu/'+room.id+'/positions', data)
+
   })
 
   document.body.addEventListener('keyup', (e) => {
     if (go.indexOf(e.key) >= 0) batship.setState(0, batship.state.direction)
     if (direction.indexOf(e.key) >= 0) batship.setState(batship.state.go, 0)
-
-    let data = { x : starShip.x,
-      y : starShip.y,
-      angle : starShip.angle,
-      starShip_id : starShip.id}
-
-    client.publish('raichu/'+room.id+'/positions', data)
 
   })
 }
@@ -144,7 +136,7 @@ async function createRoom(){
   
   player = new Player(nickname, gender, null, team)
   room = new Room();
-  starShip = StarShip.create(galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
+  starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
   player.setStartship(starShip)
 
   connect(rabbitmqSettings)
@@ -165,7 +157,7 @@ async function joinForm() {
   player = new Player(nickname, gender, null, team)
   room = new Room();
   room.id = idRoom;
-  starShip = StarShip.create(galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
+  starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
   player.setStartship(starShip)
 
   connect(rabbitmqSettings)
@@ -194,10 +186,9 @@ function changeToGame(){
 
 function paintOtherShip(player){
   let galaxy = document.getElementById('galaxy')
-  let ship = StarShip.create(galaxy, player.starship.imagePath, 'small batship' , player.starship.x, player.starship.y, player.starship.angle)
-  console.log(ship)
-  starShips.push(ship);
-  starShips[starShips.length-1].play();     
+  let ship = StarShip.create(player.id, galaxy, player.starship.imagePath, 'small batship' , player.starship.x, player.starship.y, player.starship.angle)
+  otherShips[ship.id] = ship;
+  otherShips[ship.id].play();     
   
 
 }
