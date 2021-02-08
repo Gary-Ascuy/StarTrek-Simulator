@@ -50,8 +50,8 @@ async function connect(options) {
           }
           break;
         case "Ship movement":
-          console.log("Someone just moved..")
-          console.log(msj.id)
+  /*         console.log("Someone just moved..")
+          console.log(msj.id) */
 
           if(msj.id != ID) {
             ships[msj.id].setPosition(msj.x, msj.y)
@@ -68,7 +68,9 @@ async function connect(options) {
   } catch (error) {
     console.log(error)
   }
+
 }
+
 
 function addKeyEvent(batship) {
   const up = ['w', 'ArrowUp']
@@ -89,8 +91,10 @@ function addKeyEvent(batship) {
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
 
     if (space.indexOf(e.key) >= 0) {
+
       const bulletId = Date.now()
-      const bullet = Bullet.create(galaxy, './assets/spaceship/bullet.png', batship.getX(), batship.getY(), batship.getAngle(), bulletId)
+      const bullet = Bullet.create(galaxy, './assets/spaceship/bullet.png', 
+      batship.getX(), batship.getY(), batship.getAngle(), bulletId)
       bullet.play()
       bullet.setState(1, 0)
     }
@@ -110,13 +114,13 @@ async function main() {
   console.log('Connecting to RabbitMQ/MQTT over WebSocket')
   client = await connect(rabbitmqSettings)
   
-  // console.log('Creating USS Enterprise element')
-  // const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 1, 1, 90)
-  // enterprise.play()
-  // enterprise.setState(1, 0) 
+  console.log('Creating USS Enterprise element')
+  const enterprise = StarShip.create(galaxy, './assets/spaceship/ussenterprise.png', 'ussenterprise', 1, 1, 90)
+  enterprise.play()
+  enterprise.setState(1, 0) 
+
 
   const batship = StarShip.create(galaxy, SPRITEPATH, 'small batship', 200, 200, 45)
-
   batship.play()
   addKeyEvent(batship)
 
