@@ -1,4 +1,4 @@
-const SALA = "temp"
+let ROOM = "temp"
 const ID = "1"
 const NICKNAME = "SHA"
 const GENDER = "M"
@@ -83,6 +83,7 @@ async function loadGame(){
   
   console.log('Starting Star Trek Simulator')
   galaxy = document.getElementById('galaxy')
+  document.getElementById('room_code').innerHTML = "Room code: " + ROOM
 
   console.log('Connecting to RabbitMQ/MQTT over WebSocket')
   client = await connect(rabbitmqSettings)
@@ -131,8 +132,8 @@ function getFormInfo(){
 
 function createRoom(){
   console.log('Generating room code')
-  const roomCode = generateRandomMCode()
-  console.log("Room code: " + roomCode)
+  ROOM = getLetterRandomCode()
+  console.log("Room code: " + ROOM)
   let dataDict = getFormInfo();
 
   // console.log('Creating a player object')
@@ -142,7 +143,7 @@ function createRoom(){
 }
 
 function joinRoom(){
-  const roomCode = document.getElementById('code').value
+  ROOM = document.getElementById('code').value
   let dataDict = getFormInfo();
 
   // console.log('Creating a player object')
