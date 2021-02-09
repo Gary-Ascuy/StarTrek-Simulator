@@ -99,7 +99,7 @@ function addKeyEvent(batship) {
   const down = ['s', 'ArrowDown']
   const left = ['a', 'ArrowLeft']
   const right = ['d', 'ArrowRight']
-  const shoot = ['p', 'Shoot']
+  const shoot = ['Enter']
   const go = [...up, ...down]
   const direction = [...left, ...right]
   const stop = [' ', 'c', 'x']
