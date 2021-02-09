@@ -61,34 +61,34 @@ class StarShip {
       newLaser.classList.add('laser')
       newLaser.style.left = `${xPosition + 20}px`
       newLaser.style.top = `${yPosition + 20}px`
+
+      console.log(xPosition, yPosition)
+      console.log(newLaser.style.left, newLaser.style.top)
       return newLaser
     }
 
-    moveLaser(laser, angle) {
+    moveLaser(laser, angle, width, height) {
       let laserInterval = setInterval(() => {
         let xPosition = parseInt(laser.style.left)
         let yPosition = parseInt(laser.style.top)
-        console.log("angulo" + angle)
-        if (xPosition >= 1000 || xPosition <= 0 || (angle === 0 || angle === 180) ) {
+
+        if (xPosition >= width || xPosition <= 0 || (angle === 0 || angle === 180) ) {
           laser.remove()
+          clearInterval(laserInterval)
         } else if ( yPosition < 0) {
           
-          laser.style.top = `${400}px`
-        }else if ( yPosition > 400) {
+          laser.style.top = `${height}px`
+        }else if ( yPosition > height) {
           
           laser.style.top = `${0}px`
         }else {
           const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10
           const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10
-          //console.log(x)
-          //console.log(y)
           laser.style.left = `${xPosition + x}px`
           laser.style.top = `${yPosition - y}px`
 
-          //console.log(laser.style.left)
-          //console.log(laser.style.top)
         }
-      }, 30)
+      }, 50)
     }
 
     fireLaser() {
@@ -99,9 +99,11 @@ class StarShip {
       console.log(go, direction, angle)
 
       let laser = this.createLaserElement(angle, direction)
+      var height = mainPlayArea.offsetHeight - 20
+      var width = mainPlayArea.offsetWidth - 20
       mainPlayArea.appendChild(laser)
 
-      this.moveLaser(laser, angle)
+      this.moveLaser(laser, angle,width, height)
     }
   
 //*********************** */
