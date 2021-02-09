@@ -165,3 +165,9 @@ select {
   .col-11 {width: 91.66%;}
   .col-12 {width: 100%;}
 }
+
+.laser {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}

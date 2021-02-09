@@ -47,6 +47,64 @@ class StarShip {
     stop() {
       clearInterval(this.timer)
     }
+
+    //*********************** */
+
+    createLaserElement(angle) {
+      let xPosition = parseInt(window.getComputedStyle(this.el).getPropertyValue('left'))
+      let yPosition = parseInt(window.getComputedStyle(this.el).getPropertyValue('top'))
+
+      const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10
+      const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10 
+      let newLaser = document.createElement('img')
+      newLaser.src = 'assets/spaceship/laser.png'
+      newLaser.classList.add('laser')
+      newLaser.style.left = `${xPosition + 20}px`
+      newLaser.style.top = `${yPosition + 20}px`
+      return newLaser
+    }
+
+    moveLaser(laser, angle) {
+      let laserInterval = setInterval(() => {
+        let xPosition = parseInt(laser.style.left)
+        let yPosition = parseInt(laser.style.top)
+        console.log("angulo" + angle)
+        if (xPosition >= 1000 || xPosition <= 0 || (angle === 0 || angle === 180) ) {
+          laser.remove()
+        } else if ( yPosition < 0) {
+          
+          laser.style.top = `${400}px`
+        }else if ( yPosition > 400) {
+          
+          laser.style.top = `${0}px`
+        }else {
+          const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10
+          const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10
+          //console.log(x)
+          //console.log(y)
+          laser.style.left = `${xPosition + x}px`
+          laser.style.top = `${yPosition - y}px`
+
+          //console.log(laser.style.left)
+          //console.log(laser.style.top)
+        }
+      }, 30)
+    }
+
+    fireLaser() {
+      const mainPlayArea = document.getElementById('galaxy')
+
+      const { go, direction } = this.state
+      const angle = (this.angle + direction) % 360
+      console.log(go, direction, angle)
+
+      let laser = this.createLaserElement(angle, direction)
+      mainPlayArea.appendChild(laser)
+
+      this.moveLaser(laser, angle)
+    }
+  
+//*********************** */
   
     static create(id, parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
       const img = document.createElement('img')
