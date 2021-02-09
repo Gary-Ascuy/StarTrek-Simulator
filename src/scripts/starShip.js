@@ -20,9 +20,11 @@ class StarShip {
 
     detectLimit(posx,posy,radious){
 
-      //const galaxyDiv = document.getElementById("mydiv").offsetWidth
+      const galaxyDiv = document.getElementById("galaxy").offsetWidth
 
-      if((posx)<0 || (posx+radious)>1370 ||
+      console.log(galaxyDiv)
+      if(galaxyDiv===0)return false
+      if((posx)<0 || (posx+radious)>galaxyDiv ||
          (posy)<0 || (posy+radious)>400){
     
           return true
