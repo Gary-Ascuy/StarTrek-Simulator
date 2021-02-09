@@ -20,6 +20,7 @@ async function connect(options) {
     client.subscribe('raichu/'+room.id+'/informNewPosition').on(addNewShip )
     client.subscribe('raichu/'+room.id+'/informPositionOld').on(getOldShips )
     client.subscribe('raichu/'+room.id+'/positions').on(changePosition)
+    client.subscribe('raichu/'+room.id+'/bullets').on(getOtherBullets)
 
     client.publish('raichu/'+room.id+'/informNewPosition', player)
     paintUser(player,true)
@@ -85,12 +86,17 @@ function changePosition(dataIn){
 
   var data = JSON.parse(dataIn.string)
 
-  if( otherShips[data.starShip_id] !== undefined && otherShips[data.starShip_id] !== null){
-    otherShips[data.starShip_id].setPosition(data.x, data.y);
-    otherShips[data.starShip_id].setAngle(data.angle);
+  if( otherShips[data.starShipId] !== undefined && otherShips[data.starShipId] !== null){
+    otherShips[data.starShipId].setPosition(data.x, data.y);
+    otherShips[data.starShipId].setAngle(data.angle);
   }
+}
 
-  
+function getOtherBullets(dataIn){
+  var data = JSON.parse(dataIn.string)
+  if( otherShips[data.starShipId] !== undefined && otherShips[data.starShipId] !== null){
+    otherShips[data.starShipId].fireLaser();
+  }
 }
 
 
@@ -112,12 +118,16 @@ function addKeyEvent(batship) {
     if (right.indexOf(e.key) >= 0) batship.setState(batship.state.go, 1)
 
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
-    if (shoot.indexOf(e.key) >= 0) batship.fireLaser()
+    if (shoot.indexOf(e.key) >= 0){
+      batship.fireLaser();
+      let data = { starShipId : player.id}
+      client.publish('raichu/'+room.id+'/bullets', data );
+    } 
 
     let data = { x : starShip.x,
       y : starShip.y,
       angle : starShip.angle,
-      starShip_id : player.id}
+      starShipId : player.id}
 
     client.publish('raichu/'+room.id+'/positions', data)
 
@@ -187,10 +197,10 @@ function changeToGame(){
 
 
 function paintOtherShip(player){
+
   let galaxy = document.getElementById('galaxy')
   let ship = StarShip.create(player.id, galaxy, player.starship.imagePath, 'small batship' , player.starship.x, player.starship.y, player.starship.angle)
   otherShips[ship.id] = ship;
   otherShips[ship.id].play();     
-  
 
 }
