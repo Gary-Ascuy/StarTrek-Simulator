@@ -25,44 +25,8 @@ async function connect(options) {
 
       const msj = JSON.parse(message.string)
       
-      switch(msj.type) {
-        case "arrival":
-          console.log("A new contender has just arrived!!!!")
-          console.log(msj.id)
+      resolveMessage(msj, ID, ships, client)
 
-          if(msj.id != ID) {
-            console.log("New ship, id:")
-            console.log(msj.id)
-            const batship = StarShip.create(galaxy, './assets/spaceship/batship.png', 'small batship', 200, 200, 45)
-            ships[msj.id] = batship
-            console.log(msj.id)
-            client.publish('teamName/topic1', { type: "Existence notification", id: ID, x: ships[ID].x, y: ships[ID].y, angle: ships[ID].angle, sprite: SPRITEPATH })
-          }
-          break;
-        case "Existence notification":
-          if(msj.id != ID && !(msj.id in ships)) {
-            console.log("A non default test")
-            const batship = StarShip.create(galaxy, msj.sprite, 'small batship', 200, 200, 45)
-            ships[msj.id] = batship
-            ships[msj.id].setPosition(msj.x, msj.y)
-            ships[msj.id].setAngle(msj.angle)
-            console.log(msj.id)
-            console.log(ships[msj.id])
-          }
-          break;
-        case "Ship movement":
-  /*         console.log("Someone just moved..")
-          console.log(msj.id) */
-
-          if(msj.id != ID) {
-            ships[msj.id].setPosition(msj.x, msj.y)
-            ships[msj.id].setAngle(msj.angle)
-          }
-          break;
-          
-        default:
-          console.log("A default test")
-      }
     })
     client.publish('teamName/topic1', { type: "arrival", id: ID })
     return client
