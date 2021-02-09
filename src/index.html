@@ -30,10 +30,10 @@
   <div id='galaxy'></div>
 
   <div id="formularies">
-    <div class = "join"> Join Room </div>
-    <div class = "create"> Create Room </div>
+    <button class = "join" onclick="loadJoinRoom()"> Join Room </button>
+    <button class = "create" onclick="loadCreateRoom()"> Create Room </button>
     
-    <div class="join-form">
+    <div class="create-form">
       <input name="nickName" class="input" type="text" placeholder="Nick Name"> <br />
       <select name="gender" id ="gender" class="input optional">
         <option value="nonBinary">Non Binary</option>
@@ -53,7 +53,7 @@
       <button type="submit" class = "btn" onclick="joinRoom()"> Join! </button> 
     </div>
 
-    <div class="create-form">
+    <div class="join-form">
       <input name="nickName" id="nickName" class="input" type="text" placeholder="Nick Name"> <br />
       <select name="gender" id ="gender" class="input optional">
         <option value="nonBinary">Non Binary</option>
