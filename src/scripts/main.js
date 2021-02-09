@@ -84,7 +84,7 @@ function paintUser(data,myUser=false){
 function changePosition(dataIn){
 
   var data = JSON.parse(dataIn.string)
-
+  
   if( otherShips[data.starShip_id] !== undefined && otherShips[data.starShip_id] !== null){
     otherShips[data.starShip_id].setPosition(data.x, data.y);
     otherShips[data.starShip_id].setAngle(data.angle);
@@ -128,6 +128,7 @@ function addKeyEvent(batship) {
   })
 }
 
+
 async function createRoom(){
   let team = document.getElementById("input_team").value;
   let nickname = document.getElementById("input_nickname");
@@ -141,7 +142,7 @@ async function createRoom(){
   else{
     player = new Player(nickname.value, gender, null, team)
     room = new Room();
-    starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
+    starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 5, 5, 90)
     player.setStartship(starShip)
 
     connect(rabbitmqSettings)
@@ -163,7 +164,6 @@ async function joinForm() {
   let gender = document.getElementById("input_gender_join").value;
   let ship = document.getElementById("input_starship_join").value;
   
-  console.log("ENTROO")
   if(nickname.value.length===0){
     nickname.style.borderColor = "red";
   }
@@ -180,7 +180,7 @@ async function joinForm() {
     player = new Player(nickname.value, gender, null, team)
     room = new Room();
     room.id = idRoom.value;
-    starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 0, 0, 90)
+    starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 5, 5, 90)
     player.setStartship(starShip)
 
     connect(rabbitmqSettings)
@@ -216,3 +216,4 @@ function paintOtherShip(player){
   
 
 }
+
