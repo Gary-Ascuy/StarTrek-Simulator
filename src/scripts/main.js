@@ -55,6 +55,7 @@ function paintUser(data,myUser=false){
 
   const divUser = document.createElement('div')
   divUser.className = 'user'
+  divUser.c = 'user'
   if(myUser){
     divUser.style.border = "3px solid red"
     divUser.style.borderRadius = "10px"
@@ -70,8 +71,10 @@ function paintUser(data,myUser=false){
   nickname.textContent = "Nickname:"+data.nickname;
 
 
+  console.log(data)
   const lives = document.createElement("h4");
-  lives.textContent = "Lives:"+"1";
+  lives.textContent = "Lives:"+data.starship.life;
+  lives.id = data.id;
 
 
   divData.appendChild(nickname)
@@ -94,7 +97,7 @@ function changePosition(dataIn){
 function getOtherBullets(dataIn){
   var data = JSON.parse(dataIn.string)
   if( otherShips[data.starShipId] !== undefined && otherShips[data.starShipId] !== null){
-    otherShips[data.starShipId].fireLaser();
+    otherShips[data.starShipId].fireLaser(moveLaser);
   }
 }
 
@@ -118,7 +121,7 @@ function addKeyEvent(batship) {
 
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
     if (shoot.indexOf(e.key) >= 0){
-      batship.fireLaser();
+      batship.fireLaser(moveLaser);
       let data = { starShipId : player.id}
       client.publish('raichu/'+room.id+'/bullets', data );
     } 
@@ -226,5 +229,61 @@ function paintOtherShip(player){
   otherShips[ship.id] = ship;
   otherShips[ship.id].play();     
 
+}
+
+function modifyLifes(ship){
+  document.getElementById(ship.id).innerHTML = "Lifes:" + ship.life
+}
+
+function playerShooted(x,y,laser,laserInterval){
+  
+  Object.keys(otherShips).forEach(ship => {
+    
+    if(detectCollision(x,y,otherShips[ship].x,otherShips[ship].y)) {
+      otherShips[ship].getShoot()
+      clearInterval(laserInterval)
+      laser.remove()
+
+      modifyLifes(otherShips[ship])
+    }   
+  });
+}
+
+function detectCollision(x1,y1,x2,y2){
+  console.log(x1,y1)
+  console.log(x2,y2)
+
+  let distance = Math.hypot(Math.abs(x1-x2),Math.abs(y1-y2))
+  console.log(distance)
+  if(distance<25) return true
+  else return false
+}
+
+
+function moveLaser(laser, angle, width, height) {
+
+  let laserInterval = setInterval(() => {
+    let xPosition = parseInt(laser.style.left)
+    let yPosition = parseInt(laser.style.top)
+
+    if (xPosition >= width || xPosition <= 0 || (angle === 0 || angle === 180) ) {
+      laser.remove()
+      clearInterval(laserInterval)
+    } else if ( yPosition < 0) {
+      
+      laser.style.top = `${height}px`
+    }else if ( yPosition > height) {
+      
+      laser.style.top = `${0}px`
+    }else {
+      const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10
+      const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10
+      laser.style.left = `${xPosition + x}px`
+      laser.style.top = `${yPosition - y}px`
+
+      playerShooted(xPosition + x,yPosition - y,laser, laserInterval)
+
+    }
+  }, 50)
 }
 
