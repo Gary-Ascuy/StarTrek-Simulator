@@ -75,6 +75,38 @@ function addKeyEvent(batship) {
 async function loadLogin(){
   document.getElementById('galaxy').style.display = "none"
   document.getElementById('formularies').style.display = "block"
+
+  const create_btn = document.getElementsByClassName('create')[0]
+  create_btn.style.background = "none"
+  create_btn.style.color = "rgb(52, 52, 52)"
+}
+
+async function loadCreateRoom(){
+
+  document.getElementsByClassName('join-box')[0].style.display = "none"
+
+  const create_btn = document.getElementsByClassName('create')[0]
+  create_btn.style.background = "rgb(14, 1, 44)"
+  create_btn.style.color = "white" 
+
+  const join_btn = document.getElementsByClassName('join')[0]
+  join_btn.style.background = "none"
+  join_btn.style.color = "rgb(52, 52, 52)"
+  
+}
+
+async function loadJoinRoom(){
+
+  document.getElementsByClassName('join-box')[0].style.display = "block"
+
+  const join_btn = document.getElementsByClassName('join')[0]
+  join_btn.style.background = "rgb(14, 1, 44)"
+  join_btn.style.color = "white" 
+
+  const create_btn = document.getElementsByClassName('create')[0]
+  create_btn.style.background = "none"
+  create_btn.style.color = "rgb(52, 52, 52)"
+  
 }
 
 async function loadGame(){

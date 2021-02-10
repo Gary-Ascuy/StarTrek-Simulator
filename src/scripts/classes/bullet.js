@@ -80,6 +80,7 @@ class Bullet {
           this.setVisibility(false)
           this.stop() // Detiene la bala
           console.log("Me dieron!!!!")
+          this.setPosition(0,0)
         } 
       }
       )},250)
@@ -104,7 +105,7 @@ class Bullet {
     img.id = id
     img.src = imagePath
     parent.appendChild(img)
-    return new Bullet(img, x, y, angle)
+    return new Bullet(img, x, y, angle, id)
 
   }
 }
