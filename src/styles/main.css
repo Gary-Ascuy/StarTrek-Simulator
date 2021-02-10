@@ -1,5 +1,6 @@
 body h1.title {
   text-align: center;
+  background-color: red;
 }
 
 div#galaxy {
