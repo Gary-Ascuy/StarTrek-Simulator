@@ -17,13 +17,33 @@ class StarShip {
       this.angle = angle
       this.el.style.transform = `rotate(${angle}deg)`
     }
+
+    detectLimit(posx,posy,radious){
+
+      const galaxyDiv = document.getElementById("galaxy").offsetWidth
+
+      console.log(galaxyDiv)
+      if(galaxyDiv===0)return false
+      if((posx)<0 || (posx+radious)>galaxyDiv ||
+         (posy)<0 || (posy+radious)>400){
+    
+          return true
+      }
+      else return false;
+    }
   
     setPosition(x, y) {
-      this.x = x
-      this.y = y
-  
-      this.el.style.left = `${x}px`
-      this.el.style.top = `${y}px`
+      
+      console.log(x,y)
+      if(!this.detectLimit(x,y,50)){
+        this.x = x
+        this.y = y
+    
+        this.el.style.left = `${x}px`
+        this.el.style.top = `${y}px`
+      }
+     
+      
     }
   
     setVisibility(visible) {
@@ -34,11 +54,11 @@ class StarShip {
       this.timer = setInterval(()=> {
         const { go, direction } = this.state  
         if (go === 0 && direction === 0) return;
-  
+        
         const angle = (this.angle + direction) % 360
         const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go
         const y = this.y - Math.cos(this.angle / 360.0 * 2 * Math.PI) * go
-    
+        
         this.setPosition(x, y)
         this.setAngle(angle)
       }, 30)
