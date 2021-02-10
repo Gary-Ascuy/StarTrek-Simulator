@@ -17,6 +17,7 @@ async function connect(options) {
   try {
     client = await RsupMQTT.connect(options)
     player.id = client.clientId
+    player.starship.id = player.id;
     client.subscribe('raichu/'+room.id+'/informNewPosition').on(addNewShip )
     client.subscribe('raichu/'+room.id+'/informPositionOld').on(getOldShips )
     client.subscribe('raichu/'+room.id+'/positions').on(changePosition)
@@ -158,6 +159,7 @@ async function createRoom(){
     room = new Room();
     starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 5, 5, 90)
     player.setStartship(starShip)
+    
 
     connect(rabbitmqSettings)
     changeToGame();
@@ -196,6 +198,7 @@ async function joinForm() {
     room.id = idRoom.value;
     starShip = StarShip.create(player.id, galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 5, 5, 90)
     player.setStartship(starShip)
+    player.starship.id = player.id;
 
     connect(rabbitmqSettings)
     changeToGame();
@@ -232,6 +235,7 @@ function paintOtherShip(player){
 }
 
 function modifyLifes(ship){
+  console.log(ship)
   document.getElementById(ship.id).innerHTML = "Lifes:" + ship.life
 }
 
@@ -243,9 +247,14 @@ function playerShooted(x,y,laser,laserInterval){
       otherShips[ship].getShoot()
       clearInterval(laserInterval)
       laser.remove()
-
       modifyLifes(otherShips[ship])
-    }   
+
+    }else if(detectCollision(x,y, player.starship.x,player.starship.y)){
+      player.starship.getShoot()
+      clearInterval(laserInterval)
+      laser.remove();
+      modifyLifes(player.starship)
+    } 
   });
 }
 
@@ -261,7 +270,7 @@ function detectCollision(x1,y1,x2,y2){
 
 
 function moveLaser(laser, angle, width, height) {
-
+  let timeLifeLaser = 0;
   let laserInterval = setInterval(() => {
     let xPosition = parseInt(laser.style.left)
     let yPosition = parseInt(laser.style.top)
@@ -281,7 +290,11 @@ function moveLaser(laser, angle, width, height) {
       laser.style.left = `${xPosition + x}px`
       laser.style.top = `${yPosition - y}px`
 
-      playerShooted(xPosition + x,yPosition - y,laser, laserInterval)
+      if(timeLifeLaser > 150){
+        playerShooted(xPosition + x,yPosition - y, laser, laserInterval)
+      }
+
+      timeLifeLaser += 50;
 
     }
   }, 50)

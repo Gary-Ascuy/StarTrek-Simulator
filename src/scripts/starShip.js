@@ -89,8 +89,8 @@ class StarShip {
       newLaser.style.left = `${xPosition + 20}px`
       newLaser.style.top = `${yPosition + 20}px`
 
-      console.log(xPosition, yPosition)
-      console.log(newLaser.style.left, newLaser.style.top)
+      //console.log(xPosition, yPosition)
+      //console.log(newLaser.style.left, newLaser.style.top)
       return newLaser
     }
 
@@ -99,14 +99,14 @@ class StarShip {
 
       const { go, direction } = this.state
       const angle = (this.angle + direction) % 360
-      console.log(go, direction, angle)
+      //console.log(go, direction, angle)
 
       let laser = this.createLaserElement(angle, direction)
       var height = mainPlayArea.offsetHeight - 20
       var width = mainPlayArea.offsetWidth - 20
       mainPlayArea.appendChild(laser)
 
-      moveLaser(laser, angle,width, height)
+      moveLaser(laser, angle, width, height)
     }
   
 //*********************** */
