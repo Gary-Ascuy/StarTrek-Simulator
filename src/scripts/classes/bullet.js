@@ -83,6 +83,7 @@ class Bullet {
 
           if(ID != player.id) // not to shoot myself!
             this.updatePointsAndHealth (ID, player.id)
+
         } 
       }
       )},250)
@@ -131,7 +132,7 @@ class Bullet {
     img.id = id
     img.src = imagePath
     parent.appendChild(img)
-    return new Bullet(img, x, y, angle)
+    return new Bullet(img, x, y, angle, id)
 
   }
 }
