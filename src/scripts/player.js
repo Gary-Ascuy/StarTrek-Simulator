@@ -9,6 +9,8 @@ class Player{
     
     setStartship(starship) {
         this.starship = starship
-      }
+    }
+
+  
 
   }

@@ -7,6 +7,13 @@ class StarShip {
       this.setAngle(angle)
       this.setPosition(x, y)
       this.setVisibility(true)
+
+      this.life=5;
+    }
+
+    getShoot(){
+      console.log("ME DISPARARON")
+      this.life = this.life - 1
     }
   
     setState(go = 0, direction = 0) {
@@ -82,48 +89,24 @@ class StarShip {
       newLaser.style.left = `${xPosition + 20}px`
       newLaser.style.top = `${yPosition + 20}px`
 
-      console.log(xPosition, yPosition)
-      console.log(newLaser.style.left, newLaser.style.top)
+      //console.log(xPosition, yPosition)
+      //console.log(newLaser.style.left, newLaser.style.top)
       return newLaser
     }
 
-    moveLaser(laser, angle, width, height) {
-      let laserInterval = setInterval(() => {
-        let xPosition = parseInt(laser.style.left)
-        let yPosition = parseInt(laser.style.top)
-
-        if (xPosition >= width || xPosition <= 0 || (angle === 0 || angle === 180) ) {
-          laser.remove()
-          clearInterval(laserInterval)
-        } else if ( yPosition < 0) {
-          
-          laser.style.top = `${height}px`
-        }else if ( yPosition > height) {
-          
-          laser.style.top = `${0}px`
-        }else {
-          const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10
-          const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10
-          laser.style.left = `${xPosition + x}px`
-          laser.style.top = `${yPosition - y}px`
-
-        }
-      }, 50)
-    }
-
-    fireLaser() {
+    fireLaser(moveLaser) {
       const mainPlayArea = document.getElementById('galaxy')
 
       const { go, direction } = this.state
       const angle = (this.angle + direction) % 360
-      console.log(go, direction, angle)
+      //console.log(go, direction, angle)
 
       let laser = this.createLaserElement(angle, direction)
       var height = mainPlayArea.offsetHeight - 20
       var width = mainPlayArea.offsetWidth - 20
       mainPlayArea.appendChild(laser)
 
-      this.moveLaser(laser, angle,width, height)
+      moveLaser(laser, angle, width, height)
     }
   
 //*********************** */
