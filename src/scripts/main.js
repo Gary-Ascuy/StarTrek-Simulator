@@ -75,7 +75,6 @@ function addKeyEvent(batship) {
 async function loadLogin(){
   document.getElementById('galaxy').style.display = "none"
   document.getElementById('formularies').style.display = "block"
-  document.getElementsByClassName('create-form')[0].style.display = "none"
 
   const create_btn = document.getElementsByClassName('create')[0]
   create_btn.style.background = "none"
@@ -84,8 +83,7 @@ async function loadLogin(){
 
 async function loadCreateRoom(){
 
-  document.getElementsByClassName('join-form')[0].style.display = "none"
-  document.getElementsByClassName('create-form')[0].style.display = "block"
+  document.getElementsByClassName('join-box')[0].style.display = "none"
 
   const create_btn = document.getElementsByClassName('create')[0]
   create_btn.style.background = "rgb(14, 1, 44)"
@@ -99,8 +97,7 @@ async function loadCreateRoom(){
 
 async function loadJoinRoom(){
 
-  document.getElementsByClassName('create-form')[0].style.display = "none"
-  document.getElementsByClassName('join-form')[0].style.display = "block"
+  document.getElementsByClassName('join-box')[0].style.display = "block"
 
   const join_btn = document.getElementsByClassName('join')[0]
   join_btn.style.background = "rgb(14, 1, 44)"

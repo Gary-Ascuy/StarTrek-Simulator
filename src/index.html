@@ -32,28 +32,8 @@
   <div id="formularies">
     <button class = "join" onclick="loadJoinRoom()"> Join Room </button>
     <button class = "create" onclick="loadCreateRoom()"> Create Room </button>
-    
-    <div class="create-form">
-      <input name="nickName" class="input" type="text" placeholder="Nick Name"> <br />
-      <select name="gender" id ="gender" class="input optional">
-        <option value="nonBinary">Non Binary</option>
-        <option value="female">Female</option>
-        <option value="male">Male</option>
-      </select> <br />
-      <select name="starship" id = "starship" class="input">
-        <option value="enterprise">USS Entreprise</option>
-        <option value="miranda">Clase Miranda</option>
-        <option value="bird">Bird of Prey </option>
-        <option value="devisor">IKS Devisor </option>
-      </select> <br />
-      <select name="team" class="input" id ="team">
-        <option value="klingon">Klingon</option>
-        <option value="federation">Federation</option>
-      </select> <br />
-      <button type="submit" class = "btn" onclick="joinRoom()"> Join! </button> 
-    </div>
 
-    <div class="join-form">
+    <div class="form-inputs">
       <input name="nickName" id="nickName" class="input" type="text" placeholder="Nick Name"> <br />
       <select name="gender" id ="gender" class="input optional">
         <option value="nonBinary">Non Binary</option>
@@ -70,7 +50,9 @@
         <option value="klingon">Klingon</option>
         <option value="federation">Federation</option>
       </select> <br />
-      <input name="code" id="code" class="input" type="text" placeholder="Game code">
+      <div class = "join-box">
+        <input name="code" id="code" class="input" type="text" placeholder="Game code">
+      </div>
       <button type="submit" class = "btn" onclick="joinRoom()"> Join! </button> 
     </div>
   </div>
@@ -78,74 +60,3 @@
 
 </html>
 
-
-  <!-- <div id="formularies">
-    <div id="userForm" onsubmit="return false">
-      <h2> Create User </h2>
-      <form class="form-inline" onsubmit="createRoom();return false">
-        <div class="row">
-          <div class="col">
-            <div class="box">
-              <input name="nickName" id="nickName" type="text" placeholder="Nick Name">
-            </div>
-          </div>
-          <div class="col">
-            <div class="box">
-              <select name="gender" id="gender">
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-                <option value="nonBinary">Non Binary</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <div class="box">
-                <select name="starShip" id="starship">
-                  <option value="enterprise">USS Entreprise</option>
-                  <option value="miranda">Clase Miranda</option>
-                  <option value="bird">Bird of Prey </option>
-                  <option value="devisor">IKS Devisor </option>
-                </select>
-              </div>
-            </div>
-            <div class="col">
-              <div class="box">
-                <select name="team" id="team">
-                  <option value="klingon">Klingon</option>
-                  <option value="federation">Federation</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-2">
-                <div class="box">
-                  <input type="submit" value="Submit">
-                </div>
-              </div>
-            </div>
-      </form>
-    </div>
-
-    <div id="roomForm">
-      <h2> Join Room </h2>
-        <form class="form-inline" onsubmit="joinRoom();return false">
-        <div class="row">
-          <div class="col-2">
-            <div class="box">
-              <input name="code" id="code" type="text" placeholder="Game code">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-2">
-              <div class="box">
-                <input type="submit" value="Join">
-              </div>
-            </div>
-          </div>
-      </form>
-    </div>
-  </div> -->
