@@ -1,5 +1,5 @@
 let ROOM = "temp"
-const ID = "1"
+const ID = Math.floor(Math.random() * 100)
 const NICKNAME = "SHA"
 const GENDER = "M"
 const SPRITEPATH = './assets/spaceship/batship.png'
@@ -72,6 +72,13 @@ function addKeyEvent(batship) {
 
 }
 
+// This function updates the user's information in the DOM.
+function updateUserStatusInDOM() {
+  document.getElementById('id').innerHTML = `<strong>Id </strong>${ID}`
+  document.getElementById('health').innerHTML = `<strong>Health </strong>${ships[ID].health}`
+  document.getElementById('points').innerHTML = `<strong>Points </strong>${ships[ID].points}`
+}
+
 async function loadLogin(){
   document.getElementById('galaxy').style.display = "none"
   document.getElementById('formularies').style.display = "block"
@@ -93,13 +100,12 @@ async function loadGame(){
   //enterprise.play()
   //enterprise.setState(1, 0) 
 
-
-  const batship = StarShip.create(galaxy, SPRITEPATH, 'small batship', 200, 200, 45)
+  const batship = StarShip.create(galaxy, SPRITEPATH, 'small batship', 200, 200, 45, ID)
   batship.play()
   addKeyEvent(batship)
 
   ships[ID] = batship
-  console.log(ships[ID]) 
+  this.updateUserStatusInDOM()
 }
 
 function changeGameState(state){

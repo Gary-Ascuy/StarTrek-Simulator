@@ -79,11 +79,38 @@ class Bullet {
         if (Math.hypot(player.x - this.x, player.y - this.y) < player.radio + this.radio){
           this.setVisibility(false)
           this.stop() // Detiene la bala
-          console.log("Me dieron!!!!")
+          this.setPosition(0,0)
+
+          if(ID != player.id) // not to shoot myself!
+            this.updatePointsAndHealth (ID, player.id)
         } 
       }
       )},250)
 }
+
+  updatePointsAndHealth (myId, enemyId){    
+    console.log(`Yo #${myId} le di a #${enemyId}`)
+    ships[myId].points += 10
+    ships[enemyId].health -= 25    
+    
+    // 'Shooter' status after shooting
+    client.publish('teamName/topic1', { 
+      type: "Ship shooting", 
+      id: myId, 
+      health: ships[myId].health,
+      points: ships[myId].points,
+    })
+
+    // 'Enemy target' status after shooting
+    client.publish('teamName/topic1', { 
+      type: "Ship shooting", 
+      id: enemyId, 
+      health: ships[enemyId].health,
+      points: ships[enemyId].points,
+    })
+
+    updateUserStatusInDOM()
+  }
 
   stop() {
     clearInterval(this.timer)

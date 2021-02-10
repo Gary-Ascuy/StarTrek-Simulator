@@ -1,7 +1,7 @@
 class StarShip {
   static players = []
   static id = 0
-  constructor(el, x = 0, y = 0, angle = 0) {
+  constructor(el, x = 0, y = 0, angle = 0, id) {
     this.el = el
     this.setState()
     this.setAngle(angle)
@@ -11,8 +11,11 @@ class StarShip {
     this.ship_width = document.getElementsByClassName(this.el.className)[0].width
     this.ship_height = document.getElementsByClassName(this.el.className)[0].height
     this.radio = this.ship_height/2
-    this.id = StarShip.id
-    StarShip.id ++
+    this.id = id
+    this.health = 100
+    this.points = 0
+    // this.id = StarShip.id
+    // StarShip.id ++
     StarShip.players.push(this)
   }
 
@@ -56,6 +59,14 @@ class StarShip {
     return this.angle;
   }
 
+  setHealth(health){
+    this.health = health
+  }
+
+  setPoints(points){
+    this.points = points
+  }
+
   setVisibility(visible) {
     this.el.style.visibility = visible ? 'visible' : 'hidden'
   }
@@ -73,20 +84,17 @@ class StarShip {
       this.setPosition(x, y)
       this.setAngle(angle)
 
-      // ships[ID].setPosition(x, y)
-      // ships[ID].setAngle(angle)
-
       client.publish('teamName/topic1', { type: "Ship movement", id: ID, x: x, y: y, angle: angle })
     }, 1000/24)
   }
 
   
-  static create(parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
+  static create(parent, imagePath, extraClass, x = 0, y = 0, angle = 0, id) {
     const img = document.createElement('img')
     img.className = `starship ${extraClass}`
     img.src = imagePath
     parent.appendChild(img)
    
-    return new StarShip(img, x, y, angle)
+    return new StarShip(img, x, y, angle, id)
   }
 }
