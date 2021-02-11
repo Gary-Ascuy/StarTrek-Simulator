@@ -4,14 +4,13 @@ html {
   background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #24243e, #302b63, #0f0c29); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color: white;
-  font-family: "Trebuchet MS"
+  font-family: "Trebuchet MS";
 }
 
 button {
   background-color: transparent;
   border-radius: 20px;
   border-color: white;
-  width: 30%;
   font-family: "Trebuchet MS";
   color: white;
   font-size: 150%;
@@ -19,12 +18,14 @@ button {
 }
 
 input {
+  height: 40px;
   border-radius: 5px;
   border-color: white;
   font-family: "Trebuchet MS";
 }
 
 select {
+  height: 40px;
   border-radius: 5px;
   border-color: white;
   font-family: "Trebuchet MS";
@@ -113,17 +114,41 @@ div#federation{
 
 .form-input {
   margin: 0 auto;
+}
+
+.form-label {
+  margin: 0 auto;
+}
+
+.form-button {
   text-align: center;
+  min-width: 30%;
 }
 
 input {
-  width: 50%;
+  width: 100%;
 }
 
 select { 
-  width: 50%;
+  width: 100%;
 }
 
+
+#form-join { 
+  display: none;
+}
+
+#form-create { 
+  display: none;
+}
+
+.button-init{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
 
 [class*="col-"] {
   float: left;

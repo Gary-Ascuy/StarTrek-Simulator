@@ -225,6 +225,29 @@ function changeToGame(){
 }
 
 
+function showForm(form){
+
+  var divButton = document.getElementById("initScreen");
+  var formCreate = document.getElementById("form-create");
+  var formJoin = document.getElementById("form-join");
+  if(form === 1){
+
+    divButton.style.display = "none";
+    formCreate.style.display = "block";
+  ;
+  }else if(form === 2){
+
+    divButton.style.display = "none";
+    formJoin.style.display = "block";
+  }else if(form === 3){
+
+    divButton.style.display = "block";
+    formCreate.style.display = "none";
+    formJoin.style.display = "none";
+  }
+  
+}
+
 function paintOtherShip(player){
 
   let galaxy = document.getElementById('galaxy')
@@ -275,15 +298,9 @@ function moveLaser(laser, angle, width, height) {
     let xPosition = parseInt(laser.style.left)
     let yPosition = parseInt(laser.style.top)
 
-    if (xPosition >= width || xPosition <= 0 || (angle === 0 || angle === 180) ) {
+    if ( ( xPosition >= width || xPosition <= 0 ) || ( yPosition >= height || yPosition <= 0 ) || (angle === 0 || angle === 180) ) {
       laser.remove()
       clearInterval(laserInterval)
-    } else if ( yPosition < 0) {
-      
-      laser.style.top = `${height}px`
-    }else if ( yPosition > height) {
-      
-      laser.style.top = `${0}px`
     }else {
       const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10
       const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10

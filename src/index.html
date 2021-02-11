@@ -26,94 +26,124 @@
   <noscript>Your browser does not support JavaScript!</noscript>
   <!-- Menu -->
   <div id='menu'>
+    <!-- Init Screen -->    
+    <div id="initScreen"class="button-init col-12 col-s-12">
+      <button onclick="showForm(2)">Join Game</button>
+      <br>
+      <br>
+      <br>
+      <hr>
+      <br>
+      <br>
+      <button onclick="showForm(1)">Create Game</button>
+    </div>
+    <!-- End Init Screen -->
     <!-- Create form -->
-    <form onsubmit="createRoom();return false">
+    <div id="form-create">
       <div class="row">
-        <div class="form-input col-6 col-s-12">
-          <label for="input_nickname">Nick name:</label><br>
-          <input type="text" id="input_nickname" name="nickname">
-         </div>
-        <div class="form-input col-6 col-s-12">
-          <label for="input_gender">Gender:</label><br>
-          <select id="input_gender" name="gender">
-            <option value="man">Male</option>
-            <option value="woman" selected>Female</option>
-            <option value="noBinary">No Binary</option>
-          </select>
+        <div class="col-4 col-s-4"></div>
+        <div class="col-4 col-s-4">
+          <button onclick="showForm(3)">Back</button>
         </div>
+        <div class="col-4 col-s-4"></div>
       </div>
-      <div class="row">
-        <div class="form-input col-6 col-s-12">
-          <label for="input_starship">Starship:</label><br>
-          <select id="input_starship" name="select">
-            <option value="batship">Batship</option>
-            <option value="battleship" selected>Battleship</option>
-            <option value="spaceship">Spaceship</option>
-            <option value="ussenterprise">USS Enterprise</option>
-          </select>
-         </div>
-        <div class="form-input col-6 col-s-12">
-          <label for="input_team">Team:</label><br>
-          <select id="input_team" name="select">
-            <option value="klingon">Klingon</option>
-            <option value="federation" selected>Federation</option>
-          </select>
+      <form onsubmit="createRoom();return false">
+        <div class="row">
+          <div class="form-input col-4 col-s-3"></div>
+          <div class="form-input col-4 col-s-6">
+            <div class="form-input col-12 col-s-12">
+              <label class="form-label" for="input_nickname">Nick name:</label><br>
+              <input type="text" id="input_nickname" name="nickname">
+            </div>
+            <div class="form-input col-12 col-s-12">
+              <label for="input_gender">Gender:</label><br>
+              <select id="input_gender" name="gender">
+                <option value="man">Male</option>
+                <option value="woman" selected>Female</option>
+                <option value="noBinary">No Binary</option>
+              </select>
+            </div>
+            <div class="form-input col-12 col-s-12">
+              <label for="input_starship">Starship:</label><br>
+              <select id="input_starship" name="select">
+                <option value="batship">Batship</option>
+                <option value="battleship" selected>Battleship</option>
+                <option value="spaceship">Spaceship</option>
+                <option value="ussenterprise">USS Enterprise</option>
+              </select>
+            </div>
+            <div class="form-input col-12 col-s-12">
+              <label for="input_team">Team:</label><br>
+              <select id="input_team" name="select">
+                <option value="klingon">Klingon</option>
+                <option value="federation" selected>Federation</option>
+              </select>
+            </div>
+            <div class="form-button col-12 col-s-12">
+              <button>Create</button>
+            </div>
+          </div>
+          <div class="form-input col-4 col-s-3"></div>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-input col-12 col-s-12">
-          <button>Create</button>
-        </div>
-      </div>
-    </form>
-    <!-- End Create form -->
-    <hr>
+      </form>
+    </div>
+    <!-- End Create form --> 
+    <!-- <hr> -->
     <!-- Join form -->
-    <form  onsubmit="joinForm();return false">
+    <div id="form-join">
       <div class="row">
-        <div class="form-input col-12 col-s-12">
-          <label for="input_gamecode">Game code:</label><br>
-          <input type="text" id="input_gamecode" name="nickname">
-         </div>
-      </div>
-      <div class="row">
-        <div class="form-input col-6 col-s-12">
-          <label for="input_nickname_join">Nick name:</label><br>
-          <input type="text" id="input_nickname_join" name="nickname">
-         </div>
-        <div class="form-input col-6 col-s-12">
-          <label for="input_gender_join">Gender:</label><br>
-          <select id="input_gender_join" name="gender">
-            <option value="man">Male</option>
-            <option value="woman" selected>Female</option>
-            <option value="noBinary">No Binary</option>
-          </select>
+        <div class="col-4 col-s-4"></div>
+        <div class="col-4 col-s-4">
+          <button onclick="showForm(3)">Back</button>
         </div>
+        <div class="col-4 col-s-4"></div>
       </div>
-      <div class="row">
-        <div class="form-input col-6 col-s-12">
-          <label for="input_starship_join">Starship:</label><br>
-          <select id="input_starship_join" name="select">
-            <option value="batship">Batship</option>
-            <option value="battleship" selected>Battleship</option>
-            <option value="spaceship">Spaceship</option>
-            <option value="ussenterprise">USS Enterprise</option>
-          </select>
-         </div>
-        <div class="form-input col-6 col-s-12">
-          <label for="input_team_join">Team:</label><br>
-          <select id="input_team_join" name="select">
-            <option value="klingon">Klingon</option>
-            <option value="federation" selected>Federation</option>
-          </select>
+
+
+      <form onsubmit="joinForm();return false">
+        <div class="row">
+          <div class="form-input col-4 col-s-4"></div>
+          <div class="form-input col-4 col-s-4">
+            <div class="form-input col-12 col-s-12">
+              <label for="input_gamecode">Game code:</label><br>
+              <input type="text" id="input_gamecode" name="nickname">
+            </div>
+            <div class="form-input col-12 col-s-12">
+              <label for="input_nickname_join">Nick name:</label><br>
+              <input type="text" id="input_nickname_join" name="nickname">
+            </div>
+            <div class="form-input col-12 col-s-12">
+              <label for="input_gender_join">Gender:</label><br>
+              <select id="input_gender_join" name="gender">
+                <option value="man">Male</option>
+                <option value="woman" selected>Female</option>
+                <option value="noBinary">No Binary</option>
+              </select>
+            </div>
+            <div class="form-input col-12 col-s-12">
+              <label for="input_starship_join">Starship:</label><br>
+              <select id="input_starship_join" name="select">
+                <option value="batship">Batship</option>
+                <option value="battleship" selected>Battleship</option>
+                <option value="spaceship">Spaceship</option>
+                <option value="ussenterprise">USS Enterprise</option>
+              </select>
+            </div>
+            <div class="form-input col-12 col-s-12">
+              <label for="input_team_join">Team:</label><br>
+              <select id="input_team_join" name="select">
+                <option value="klingon">Klingon</option>
+                <option value="federation" selected>Federation</option>
+              </select>
+            </div>
+            <div class="form-button col-12 col-s-12">
+              <button>Join</button>
+            </div>
+          </div>
+          <div class="form-input col-4 col-s-4"></div>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-input col-12 col-s-12">
-          <button>Join</button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
     <!-- End Join form -->    
   </div>
   <!-- End Menu -->

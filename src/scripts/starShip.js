@@ -75,12 +75,9 @@ class StarShip {
       clearInterval(this.timer)
     }
 
-    //*********************** */
-
     createLaserElement(angle) {
       let xPosition = parseInt(window.getComputedStyle(this.el).getPropertyValue('left'))
       let yPosition = parseInt(window.getComputedStyle(this.el).getPropertyValue('top'))
-
       const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10
       const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10 
       let newLaser = document.createElement('img')
@@ -88,9 +85,6 @@ class StarShip {
       newLaser.classList.add('laser')
       newLaser.style.left = `${xPosition + 20}px`
       newLaser.style.top = `${yPosition + 20}px`
-
-      //console.log(xPosition, yPosition)
-      //console.log(newLaser.style.left, newLaser.style.top)
       return newLaser
     }
 
@@ -99,8 +93,6 @@ class StarShip {
 
       const { go, direction } = this.state
       const angle = (this.angle + direction) % 360
-      //console.log(go, direction, angle)
-
       let laser = this.createLaserElement(angle, direction)
       var height = mainPlayArea.offsetHeight - 20
       var width = mainPlayArea.offsetWidth - 20
