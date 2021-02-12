@@ -1,6 +1,6 @@
-class StarShip {
-    constructor(id, el, x = 0, y = 0, angle = 0, imagePath) {
-      this.id = id
+class Starship {
+    constructor( el, x = 0, y = 0, angle = 0, imagePath) {
+      
       this.el = el
       this.imagePath = imagePath
       this.setState()
@@ -12,7 +12,6 @@ class StarShip {
     }
 
     getShoot(){
-      console.log("ME DISPARARON")
       this.life = this.life - 1
     }
   
@@ -29,7 +28,6 @@ class StarShip {
 
       const galaxyDiv = document.getElementById("galaxy").offsetWidth
 
-      console.log(galaxyDiv)
       if(galaxyDiv===0)return false
       if((posx)<0 || (posx+radious)>galaxyDiv ||
          (posy)<0 || (posy+radious)>400){
@@ -41,7 +39,6 @@ class StarShip {
   
     setPosition(x, y) {
       
-      console.log(x,y)
       if(!this.detectLimit(x,y,50)){
         this.x = x
         this.y = y
@@ -103,12 +100,12 @@ class StarShip {
   
 //*********************** */
   
-    static create(id, parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
+    static create( parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
       const img = document.createElement('img')
       img.className = `starship ${extraClass}`
       img.src = imagePath
       parent.appendChild(img)
   
-      return new StarShip(id, img, x, y, angle, imagePath)
+      return new Starship( img, x, y, angle, imagePath)
     }
   }

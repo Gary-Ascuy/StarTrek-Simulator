@@ -1,9 +1,11 @@
 class Player{
-    constructor(nickname = "", gender = "", starship = null, team = "") {
-        this.id = '_' + Math.random().toString(36).substr(2, 9);
+    constructor(id, nickname = "", gender = "", starship = null, team = "") {
+        this.id = id
         this.nickname = nickname;
         this.gender = gender;
         this.team = team;
+        if(starship)this.starship=starship
+        this.alive=true
     }
 
     
